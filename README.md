@@ -30,7 +30,7 @@
 
 ## 本地开发
 
-要求 Node.js 20.19+ 或 22.12+，推荐 pnpm。
+要求 Node.js 20+，推荐 pnpm。
 
 ```bash
 pnpm install
@@ -68,15 +68,15 @@ Node.js: 22
 Install command: pnpm install --frozen-lockfile
 Build command: pnpm build
 Output directory: dist
-Node.js: 22.17.1
+Node.js: 22.11.0
 ```
 
-也可以通过 CLI 部署：
+如果项目是通过 GitHub 导入的，推送 `main` 分支会自动触发部署。CLI 直接上传只适用于创建时选择“直接上传”的项目，不能覆盖 GitHub 关联型项目：
 
 ```bash
 npm install -g edgeone
 edgeone login
-edgeone makers deploy -n mihomo-visual-panel
+edgeone makers deploy ./dist -n mihomo-visual-panel
 ```
 
 ## 可维护性
