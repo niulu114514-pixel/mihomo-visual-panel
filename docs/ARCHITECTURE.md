@@ -20,9 +20,10 @@ Mihomo YAML / future sing-box JSON
 
 - `src/core/config-engine.ts`：不同内核都要实现的稳定契约。
 - `src/schemas/mihomo.ts`：Mihomo 表单和信息架构，新增普通字段通常只需增加 schema。
+- `src/schemas/structured.ts`：代理/规则集合、隧道和监听的结构化字段定义，由通用集合编辑器渲染。
 - `src/adapters/mihomo/MihomoConfigEngine.ts`：Mihomo YAML 的解析、序列化和语义验证。
 - `src/stores/config.ts`：唯一配置文档、路径读写、草稿和导出。
-- `src/components/`：表单、集合、规则和 YAML 片段编辑器。
+- `src/components/`：表单、集合、Hosts、规则和 YAML 编辑器；高级未知字段在结构化编辑时保持原样。
 - `src/router/`：按内核和模块组织 URL，页面组件使用懒加载。
 - `src/components/YamlEditor.vue`：隔离 CodeMirror 生命周期与 Vue 状态同步。
 

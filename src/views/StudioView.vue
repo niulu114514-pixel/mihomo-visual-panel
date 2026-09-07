@@ -9,8 +9,10 @@ import {
 import { NBadge, NButton, NModal, useDialog, useMessage } from 'naive-ui'
 import FormModule from '@/components/FormModule.vue'
 import CollectionEditor from '@/components/CollectionEditor.vue'
+import HostsEditor from '@/components/HostsEditor.vue'
 import RulesEditor from '@/components/RulesEditor.vue'
 import RawModuleEditor from '@/components/RawModuleEditor.vue'
+import StructuredCollectionEditor from '@/components/StructuredCollectionEditor.vue'
 import { mihomoModules } from '@/schemas/mihomo'
 import { useConfigStore } from '@/stores/config'
 
@@ -139,6 +141,8 @@ onMounted(async () => { store.restoreDraft(); await nextTick() })
     <main class="workspace">
       <FormModule v-if="activeModule.kind === 'form'" :key="activeModule.id" :module="activeModule" />
       <CollectionEditor v-else-if="activeModule.kind === 'proxies' || activeModule.kind === 'groups'" :key="activeModule.id" :module="activeModule" />
+      <StructuredCollectionEditor v-else-if="activeModule.kind === 'providers' || activeModule.kind === 'raw-list'" :key="activeModule.id" :module="activeModule" />
+      <HostsEditor v-else-if="activeModule.kind === 'record'" :key="activeModule.id" :module="activeModule" />
       <RulesEditor v-else-if="activeModule.kind === 'rules'" :key="activeModule.id" :module="activeModule" />
       <RawModuleEditor v-else :key="activeModule.id" :module="activeModule" />
     </main>

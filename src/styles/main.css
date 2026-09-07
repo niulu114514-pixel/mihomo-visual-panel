@@ -61,6 +61,7 @@ a { color: var(--blue); text-decoration: none; }
 .yaml-editor { flex: 1; min-height: 0; overflow: hidden; }.yaml-editor .cm-editor { height: 100%; }.yaml-preview > footer .n-button { height: 34px; }
 
 .collection-toolbar { margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; color: #8794a9; font-size: 10px; }.search-box { width: 240px; position: relative; }.search-box svg { position: absolute; left: 10px; top: 10px; color: #8a98ad; }.search-box input { width: 100%; height: 35px; padding: 0 10px 0 34px; border: 1px solid var(--line); border-radius: 7px; background: #fff; outline: 0; font-size: 10px; }.search-box input:focus { border-color: #8badf5; }
+.collection-toolbar > span { flex: 0 0 auto; white-space: nowrap; }
 .collection-search { width: 240px; }
 .card-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(210px,1fr)); gap: 10px; }.item-card { position: relative; min-height: 116px; padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 4px 16px rgba(44,62,90,.04); }.item-card h3 { margin: 12px 30px 6px 0; color: var(--ink); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.item-card p { margin: 0; color: #8793a5; font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.item-type { display: inline-flex; padding: 3px 6px; border-radius: 4px; background: var(--blue-soft); color: var(--blue); font-size: 8px; font-weight: 700; text-transform: uppercase; }.danger-icon { position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #9da8b8; cursor: pointer; }.danger-icon:hover { background: #fff0f1; color: #dc2626; }
 .edit-chip { position: absolute; right: 12px; bottom: 11px; height: 23px; padding: 0 7px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: #68768b; cursor: pointer; font-size: 9px; }.edit-chip:hover { color: var(--blue); border-color: #b9ccf6; }.item-edit-modal textarea { width: calc(100% - 36px); min-height: 330px; margin: 16px 18px; padding: 12px; border: 1px solid var(--line); border-radius: 7px; outline: 0; background: #f9fbfd; color: #344158; resize: vertical; font: 10px/1.65 "Cascadia Code",Consolas,monospace; }
@@ -212,6 +213,28 @@ a { color: var(--blue); text-decoration: none; }
   backdrop-filter: blur(26px);
   -webkit-backdrop-filter: blur(26px);
 }
+.structured-card { min-height: 132px; }
+.structured-card .card-actions { position: absolute; right: 10px; bottom: 9px; display: flex; align-items: center; gap: 1px; }
+.structured-card .card-actions .n-button:hover { color: var(--blue); background: rgba(49,95,119,.08); }
+.structured-modal { width: min(760px, calc(100vw - 32px)); max-height: calc(100vh - 40px); }
+.structured-modal > .n-card__content { overflow: auto; }
+.visual-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+.visual-form .config-field { min-height: 76px; grid-template-columns: minmax(110px,.8fr) minmax(150px,1.2fr); }
+.visual-form .config-field--wide { grid-column: 1/-1; grid-template-columns: minmax(130px,.38fr) minmax(260px,1.62fr); }
+.structured-modal > .n-card__content > .n-alert { margin-top: 14px; background: rgba(49,95,119,.06); }
+.hosts-table { overflow: hidden; }
+.host-row { min-height: 72px; padding: 12px 14px; border-bottom: 1px solid rgba(72,92,103,.1); display: grid; grid-template-columns: minmax(150px,.8fr) minmax(220px,1.4fr) 72px; align-items: center; gap: 16px; }
+.host-row:last-child { border-bottom: 0; }
+.host-domain strong,.host-domain span { display: block; }
+.host-domain strong { color: var(--ink); font: 10.5px/1.4 "Cascadia Code", Consolas, monospace; word-break: break-all; }
+.host-domain span { margin-top: 4px; color: #88969d; font-size: 9px; }
+.host-values { display: flex; flex-wrap: wrap; gap: 5px; }
+.host-values span { padding: 4px 7px; border: 1px solid rgba(49,95,119,.12); border-radius: 5px; background: rgba(49,95,119,.07); color: #365c70; font: 9.5px "Cascadia Code", Consolas, monospace; }
+.host-actions { display: flex; justify-content: flex-end; gap: 2px; }
+.hosts-modal { width: min(520px, calc(100vw - 32px)); }
+.hosts-form { display: grid; gap: 18px; }
+.hosts-form label { display: grid; gap: 7px; color: #34444c; font-size: 11px; font-weight: 600; }
+.hosts-form small { color: #849198; font-size: 9px; font-weight: 400; }
 
 @container (max-width: 780px) {
   .section-fields { grid-template-columns: 1fr; }
@@ -228,5 +251,12 @@ a { color: var(--blue); text-decoration: none; }
 }
 @media (max-width: 620px) {
   .app-logo { min-width: 0; }.app-logo span { display: none; }.header-actions button { width: 34px; justify-content: center; padding: 0; }.header-actions button > span,.header-actions button:not(.preview-button) { font-size: 0; }.header-actions button svg { width: 16px; height: 16px; }.header-divider { display: none; }.issue-dot { position: absolute; transform: translate(10px,-10px); }.yaml-preview { left: 0; }.module-heading--actions { gap: 12px; }.module-heading--actions .search-box { width: 160px; }.section-fields { padding: 3px 14px 16px; }.config-field,.config-field--wide { grid-template-columns: 1fr; gap: 8px; }.config-field--switch { grid-template-columns: 1fr auto; }.switch-control { justify-self: auto; }.card-grid { grid-template-columns: 1fr 1fr; }.add-rule { flex-direction: column; }.add-rule .primary-button { align-self: stretch; }.fragment-head { height: auto; padding: 12px; gap: 10px; }
+}
+@media (max-width: 620px) {
+  .visual-form { grid-template-columns: 1fr; }
+  .visual-form .config-field--wide { grid-column: auto; grid-template-columns: 1fr; }
+  .host-row { grid-template-columns: 1fr 64px; gap: 8px; }
+  .host-values { grid-column: 1/-1; grid-row: 2; }
+  .host-actions { grid-column: 2; grid-row: 1; }
 }
 @media (max-width: 430px) { .card-grid { grid-template-columns: 1fr; }.module-heading { min-height: 65px; }.module-heading h1 { font-size: 20px; } }

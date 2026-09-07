@@ -68,7 +68,7 @@ Node.js: 22
 Install command: pnpm install --frozen-lockfile
 Build command: pnpm build
 Output directory: dist
-Node.js: 22.14.0
+Node.js: 22.17.1
 ```
 
 也可以通过 CLI 部署：
@@ -81,7 +81,7 @@ edgeone makers deploy -n mihomo-visual-panel
 
 ## 可维护性
 
-配置界面由 schema 驱动，YAML 解析、序列化和验证由独立的 `ConfigEngine` 实现。普通配置字段统一由 Naive UI 渲染，源码编辑由 CodeMirror 负责。后续 sing-box 接入方式见 [架构说明](docs/ARCHITECTURE.md)。
+配置界面由 schema 驱动，YAML 解析、序列化和验证由独立的 `ConfigEngine` 实现。普通字段与代理/规则集合、隧道、监听等结构化集合共用字段定义和通用编辑器，Hosts 使用独立的映射编辑器；源码编辑由 CodeMirror 负责。后续 sing-box 接入方式见 [架构说明](docs/ARCHITECTURE.md)。
 
 ## 安全说明
 
