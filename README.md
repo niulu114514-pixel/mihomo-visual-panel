@@ -1,15 +1,30 @@
 # Mihomo Flow
 
-一套基于 Vue 3 + TypeScript 的 Mihomo 可视化配置生成器，专注流畅性、配置安全和后续多内核扩展。
+一套基于 Vue 3、Vite、TypeScript、Pinia、Vue Router、Naive UI 与 CodeMirror 6 的 Mihomo 可视化配置生成器，专注流畅性、配置安全和后续多内核扩展。
 
 ## 功能
 
 - 三栏配置工作台：模块导航、可视化表单、实时 YAML 预览
+- Naive UI 表单、折叠面板、弹窗、通知与操作反馈
+- CodeMirror 6 行号、YAML 语法高亮和源码编辑
 - 新建、导入现有 YAML、源码编辑、复制、验证和导出
 - 全局、代理节点、代理组、代理/规则集合、路由规则、DNS、TLS、外部控制、Profile、TUN、嗅探、Hosts、隧道和入站监听
 - 未被表单识别的字段在导入和导出过程中仍会完整保留
 - 草稿自动保存在当前浏览器，刷新后可恢复
 - 响应式桌面/移动端界面
+
+## 页面路由
+
+配置模块使用 Hash Router，可在 Cloudflare Pages 和 EdgeOne 上直接刷新，无需额外配置回退规则：
+
+```text
+#/mihomo/general
+#/mihomo/proxies
+#/mihomo/groups
+#/mihomo/dns
+#/mihomo/tun
+#/sing-box/          后续内核入口
+```
 
 面板不会直接修改磁盘上的 YAML。只有用户主动编辑并导出时才会生成新文件；导入现有配置不会自动重排或改写代理组内容。
 
@@ -66,7 +81,7 @@ edgeone makers deploy -n mihomo-visual-panel
 
 ## 可维护性
 
-配置界面由 schema 驱动，YAML 解析、序列化和验证由独立的 `ConfigEngine` 实现。后续 sing-box 接入方式见 [架构说明](docs/ARCHITECTURE.md)。
+配置界面由 schema 驱动，YAML 解析、序列化和验证由独立的 `ConfigEngine` 实现。普通配置字段统一由 Naive UI 渲染，源码编辑由 CodeMirror 负责。后续 sing-box 接入方式见 [架构说明](docs/ARCHITECTURE.md)。
 
 ## 安全说明
 

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { Check, ExternalLink } from '@lucide/vue'
+import { NAlert, NButton, NInput, useMessage } from 'naive-ui'
 import { parse, stringify } from 'yaml'
 import type { ConfigModuleSchema } from '@/schemas/types'
 import { useConfigStore } from '@/stores/config'
 
 const props = defineProps<{ module: ConfigModuleSchema }>()
 const store = useConfigStore()
+const message = useMessage()
 const source = ref('')
 const error = ref('')
 const expected = computed(() => props.module.kind === 'raw-list' ? '数组' : '对象')
@@ -25,6 +27,7 @@ function apply() {
     if (props.module.kind !== 'raw-list' && (!value || typeof value !== 'object' || Array.isArray(value))) throw new Error(`此模块的内容必须是 YAML ${expected.value}`)
     store.setRoot(props.module.rootKey!, value)
     error.value = ''
+    message.success(`${props.module.label}片段已应用`)
   } catch (cause) { error.value = cause instanceof Error ? cause.message : '无法解析 YAML 片段' }
 }
 
@@ -35,9 +38,9 @@ watch(() => props.module.id, sync, { immediate: true })
   <div class="module-content">
     <header class="module-heading"><div><h1>{{ module.label }}</h1><p>{{ module.description }} <a :href="`https://wiki.metacubex.one${module.docsPath}`" target="_blank">查看官方文档 <ExternalLink :size="12" /></a></p></div></header>
     <section class="editor-card fragment-card">
-      <div class="fragment-head"><div><strong>{{ module.rootKey }}</strong><span>请输入 YAML {{ expected }}片段，不需要填写顶层键名</span></div><button class="primary-button" @click="apply"><Check :size="15" />应用片段</button></div>
-      <textarea v-model="source" class="fragment-editor" spellcheck="false" :placeholder="module.kind === 'raw-list' ? '- name: example\n  type: mixed\n  port: 7893' : 'example:\n  type: http\n  url: https://example.com/list.yaml'" />
-      <p v-if="error" class="inline-error">{{ error }}</p>
+      <div class="fragment-head"><div><strong>{{ module.rootKey }}</strong><span>请输入 YAML {{ expected }}片段，不需要填写顶层键名</span></div><NButton type="primary" @click="apply"><template #icon><Check :size="15" /></template>应用片段</NButton></div>
+      <NInput v-model:value="source" type="textarea" class="fragment-editor-naive mono-input" :autosize="{ minRows: 20, maxRows: 32 }" :placeholder="module.kind === 'raw-list' ? '- name: example\n  type: mixed\n  port: 7893' : 'example:\n  type: http\n  url: https://example.com/list.yaml'" />
+      <NAlert v-if="error" type="error" :bordered="false">{{ error }}</NAlert>
     </section>
   </div>
 </template>

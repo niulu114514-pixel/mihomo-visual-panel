@@ -7,6 +7,8 @@ Mihomo Flow 将“配置格式”和“界面”分开，目标是让下一阶�
 ```text
 Vue 编辑器组件
       ↓
+Vue Router（内核 / 配置模块）
+      ↓
 配置 Schema（模块、分组、字段）
       ↓
 Pinia 配置文档状态
@@ -21,6 +23,8 @@ Mihomo YAML / future sing-box JSON
 - `src/adapters/mihomo/MihomoConfigEngine.ts`：Mihomo YAML 的解析、序列化和语义验证。
 - `src/stores/config.ts`：唯一配置文档、路径读写、草稿和导出。
 - `src/components/`：表单、集合、规则和 YAML 片段编辑器。
+- `src/router/`：按内核和模块组织 URL，页面组件使用懒加载。
+- `src/components/YamlEditor.vue`：隔离 CodeMirror 生命周期与 Vue 状态同步。
 
 ## 接入 sing-box
 
