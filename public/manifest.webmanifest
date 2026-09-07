@@ -1,0 +1,9 @@
+{
+  "name": "Mihomo Flow",
+  "short_name": "Mihomo Flow",
+  "description": "轻快、私密、可扩展的 Mihomo 可视化控制面板",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07100e",
+  "theme_color": "#07100e"
+}

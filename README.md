@@ -1,0 +1,87 @@
+# Mihomo Flow
+
+一套基于 Vue 3 + TypeScript 的 Mihomo 可视化配置生成器，专注流畅性、配置安全和后续多内核扩展。
+
+## 功能
+
+- 三栏配置工作台：模块导航、可视化表单、实时 YAML 预览
+- 新建、导入现有 YAML、源码编辑、复制、验证和导出
+- 全局、代理节点、代理组、代理/规则集合、路由规则、DNS、TLS、外部控制、Profile、TUN、嗅探、Hosts、隧道和入站监听
+- 未被表单识别的字段在导入和导出过程中仍会完整保留
+- 草稿自动保存在当前浏览器，刷新后可恢复
+- 响应式桌面/移动端界面
+
+面板不会直接修改磁盘上的 YAML。只有用户主动编辑并导出时才会生成新文件；导入现有配置不会自动重排或改写代理组内容。
+
+## 本地开发
+
+要求 Node.js 20.19+ 或 22.12+，推荐 pnpm。
+
+```bash
+pnpm install
+pnpm dev
+```
+
+生产构建：
+
+```bash
+pnpm build
+pnpm preview
+```
+
+## 数据与隐私
+
+配置解析、验证和导出全部在浏览器本地完成，不上传配置文件，也不需要连接 Mihomo 控制器。请注意：草稿会自动写入当前站点的 `localStorage`；在共享设备上使用后可点击“新建”清除草稿。
+
+## 部署到 Cloudflare Pages
+
+在 Cloudflare Pages 连接此 Git 仓库，构建设置为：
+
+```text
+Build command: pnpm build
+Build output directory: dist
+Node.js: 22
+```
+
+项目是纯静态单页应用。`public/_headers` 会为 Cloudflare Pages 添加基本安全头及静态资源缓存策略。
+
+## 部署到 EdgeOne Makers / Pages
+
+在 EdgeOne Makers 导入此 Git 仓库即可。仓库根目录的 `edgeone.json` 已声明：
+
+```text
+Install command: pnpm install --frozen-lockfile
+Build command: pnpm build
+Output directory: dist
+Node.js: 22.14.0
+```
+
+也可以通过 CLI 部署：
+
+```bash
+npm install -g edgeone
+edgeone login
+edgeone makers deploy -n mihomo-visual-panel
+```
+
+## 可维护性
+
+配置界面由 schema 驱动，YAML 解析、序列化和验证由独立的 `ConfigEngine` 实现。后续 sing-box 接入方式见 [架构说明](docs/ARCHITECTURE.md)。
+
+## 安全说明
+
+- 配置文件只在浏览器内处理，部署平台不接收用户导入的 YAML。
+- `.env`、构建产物和本地凭据均不会进入 Git。
+- 若密钥曾出现在聊天、日志或截图中，请立即轮换。
+
+## 文档依据
+
+- [Mihomo 官方 API 文档](https://wiki.metacubex.one/api/)
+- [Mihomo 外部控制器配置](https://wiki.metacubex.one/config/general/)
+- [Cloudflare Pages Vite 部署](https://developers.cloudflare.com/pages/framework-guides/deploy-a-vite3-project/)
+- [EdgeOne Vite 部署](https://pages.edgeone.ai/document/vite)
+- [EdgeOne edgeone.json](https://pages.edgeone.ai/document/edgeone-json)
+
+## License
+
+MIT

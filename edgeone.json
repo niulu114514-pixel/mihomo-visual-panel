@@ -1,0 +1,7 @@
+{
+  "name": "mihomo-visual-panel",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "./dist",
+  "nodeVersion": "22.14.0"
+}
