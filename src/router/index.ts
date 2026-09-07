@@ -15,8 +15,8 @@ const router = createRouter({
     },
     {
       path: '/sing-box/:pathMatch(.*)*',
-      name: 'sing-box-coming-soon',
-      component: () => import('@/views/SingBoxPlaceholderView.vue'),
+      name: 'sing-box-studio',
+      component: () => import('@/views/SingBoxStudioView.vue'),
     },
     { path: '/:pathMatch(.*)*', redirect: '/mihomo/general' },
   ],

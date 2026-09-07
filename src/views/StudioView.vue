@@ -9,6 +9,7 @@ import {
 import { NBadge, NButton, NModal, useDialog, useMessage } from 'naive-ui'
 import FormModule from '@/components/FormModule.vue'
 import CollectionEditor from '@/components/CollectionEditor.vue'
+import ProxyGroupEditor from '@/components/ProxyGroupEditor.vue'
 import HostsEditor from '@/components/HostsEditor.vue'
 import RulesEditor from '@/components/RulesEditor.vue'
 import RawModuleEditor from '@/components/RawModuleEditor.vue'
@@ -70,6 +71,7 @@ async function importFile(event: Event) {
     await router.push('/mihomo/general')
     const count = (key: string) => Array.isArray(store.get(key)) ? (store.get(key) as unknown[]).length : 0
     message.success(`已读取 ${file.name}：${count('proxies')} 个节点、${count('proxy-groups')} 个代理组、${count('rules')} 条规则`, { duration: 5000 })
+    if (errorCount.value) validationOpen.value = true
   } catch (cause) {
     message.error(cause instanceof Error ? cause.message : '导入失败', { duration: 5000 })
   } finally {
@@ -83,6 +85,10 @@ async function copyYaml() {
 }
 
 function exportYaml() {
+  if (errorCount.value) {
+    validationOpen.value = true
+    return message.error('发现配置错误，修复后才能导出')
+  }
   store.download()
   message.success('配置已导出')
 }
@@ -134,14 +140,15 @@ onMounted(async () => { store.restoreDraft(); await nextTick() })
         <button v-for="item in mihomoModules" :key="item.id" :class="{ active: item.id === activeId }" @click="chooseModule(item.id)"><component :is="icons[item.icon]" :size="17" /><span>{{ item.label }}</span></button>
       </nav>
       <div class="nav-footer">
-        <RouterLink to="/sing-box/"><div><Code2 :size="17" /><span><strong>Mihomo</strong><small>配置规范 · sing-box 已预留</small></span><CheckCircle2 :size="15" /></div></RouterLink>
+        <RouterLink to="/sing-box/"><div><Code2 :size="17" /><span><strong>切换到 sing-box</strong><small>JSON/JSONC · 官方 Schema 校验</small></span><CheckCircle2 :size="15" /></div></RouterLink>
         <p>基于本地官方文档构建</p>
       </div>
     </aside>
 
     <main class="workspace">
       <FormModule v-if="activeModule.kind === 'form'" :key="activeModule.id" :module="activeModule" />
-      <CollectionEditor v-else-if="activeModule.kind === 'proxies' || activeModule.kind === 'groups'" :key="activeModule.id" :module="activeModule" />
+      <CollectionEditor v-else-if="activeModule.kind === 'proxies'" :key="activeModule.id" :module="activeModule" />
+      <ProxyGroupEditor v-else-if="activeModule.kind === 'groups'" :key="activeModule.id" :module="activeModule" />
       <StructuredCollectionEditor v-else-if="activeModule.kind === 'providers' || activeModule.kind === 'raw-list'" :key="activeModule.id" :module="activeModule" />
       <HostsEditor v-else-if="activeModule.kind === 'record'" :key="activeModule.id" :module="activeModule" />
       <RulesEditor v-else-if="activeModule.kind === 'rules'" :key="activeModule.id" :module="activeModule" />
@@ -163,7 +170,7 @@ onMounted(async () => { store.restoreDraft(); await nextTick() })
     </aside>
 
     <NModal v-model:show="validationOpen" preset="card" title="配置验证" class="validation-modal" :bordered="false">
-      <div v-if="!store.issues.length" class="validation-ok"><CheckCircle2 :size="36" /><strong>配置结构正常</strong><span>未发现明显的字段或引用问题</span></div>
+      <div v-if="!store.issues.length" class="validation-ok"><CheckCircle2 :size="36" /><strong>Mihomo 配置校验通过</strong><span>YAML 语法、字段类型、端口和策略引用均未发现问题</span></div>
       <div v-else class="issue-list"><div v-for="(issue,index) in store.issues" :key="index" :class="issue.level"><CircleAlert :size="17" /><span><strong>{{ issue.path }}</strong>{{ issue.message }}</span></div></div>
       <template #footer><div class="validation-footer"><span>{{ errorCount }} 个错误，{{ store.issues.length - errorCount }} 个提醒</span><NButton type="primary" @click="validationOpen = false">完成</NButton></div></template>
     </NModal>

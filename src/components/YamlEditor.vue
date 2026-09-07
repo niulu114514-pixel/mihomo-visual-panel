@@ -3,9 +3,10 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { basicSetup, EditorView } from 'codemirror'
 import { EditorState } from '@codemirror/state'
 import { yaml } from '@codemirror/lang-yaml'
+import { json } from '@codemirror/lang-json'
 import { oneDark } from '@codemirror/theme-one-dark'
 
-const props = defineProps<{ modelValue: string; editable?: boolean }>()
+const props = withDefaults(defineProps<{ modelValue: string; editable?: boolean; language?: 'yaml' | 'json' }>(), { language: 'yaml' })
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 const host = ref<HTMLElement | null>(null)
 let view: EditorView | undefined
@@ -19,7 +20,7 @@ function createEditor() {
       doc: props.modelValue,
       extensions: [
         basicSetup,
-        yaml(),
+        props.language === 'json' ? json() : yaml(),
         oneDark,
         EditorView.lineWrapping,
         EditorState.readOnly.of(!props.editable),
@@ -39,7 +40,7 @@ function createEditor() {
   })
 }
 
-watch(() => props.editable, createEditor)
+watch(() => [props.editable, props.language], createEditor)
 watch(() => props.modelValue, (value) => {
   if (!view || value === view.state.doc.toString()) return
   view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: value } })

@@ -364,3 +364,87 @@ a { color: var(--blue); text-decoration: none; }
   .rules-row > .n-button { grid-column: 3; grid-row: 1; width: 42px; height: 42px; }
   .rules-card .empty-state { min-width: 0; }
 }
+
+/* Proxy groups are edited as fields, never as a YAML fragment. */
+.group-card { min-height: 158px; }
+.group-tags { margin: 12px 0 34px; display: flex; flex-wrap: wrap; gap: 5px; }
+.group-tags span { max-width: 150px; overflow: hidden; padding: 4px 7px; border-radius: 5px; background: rgba(49,95,119,.08); color: #496977; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.group-modal > .n-card__content > .n-alert { margin-bottom: 10px; }
+.group-form { max-height: min(64vh, 720px); overflow: auto; padding-right: 5px; }
+
+/* sing-box workbench */
+.singbox-studio { height: 100vh; overflow: hidden; background: #dfe7eb; }
+.singbox-header { position: relative; }
+.singbox-header .app-logo { min-width: 220px; }
+.singbox-main { height: calc(100vh - 56px); overflow: auto; padding: 38px max(24px, calc((100vw - 1120px) / 2)) 70px; background: radial-gradient(circle at 12% 4%, rgba(255,255,255,.9), transparent 30%), linear-gradient(135deg,#dce5ea,#edf1f1 54%,#d8e2e7); }
+.singbox-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 22px; }
+.singbox-intro .eyebrow { color: #58717c; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; }
+.singbox-intro h1 { margin: 6px 0 7px; color: var(--ink); font-size: 30px; letter-spacing: -.8px; }
+.singbox-intro p { max-width: 700px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+.singbox-intro > a { flex: 0 0 auto; font-size: 12px; }
+.singbox-summary { margin-bottom: 16px; display: grid; grid-template-columns: repeat(4, minmax(110px,1fr)) minmax(180px,1.25fr); gap: 10px; }
+.singbox-summary article { min-height: 76px; padding: 14px 16px; border: 1px solid var(--line-light); border-radius: 9px; background: rgba(250,252,252,.68); box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.7); display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(14px); }
+.singbox-summary article > strong { color: var(--blue); font-size: 22px; line-height: 1; }
+.singbox-summary article > span { margin-top: 8px; color: var(--muted); font-size: 11px; }
+.singbox-summary .validation-state { flex-direction: row; align-items: center; justify-content: flex-start; gap: 10px; color: #3b7354; }
+.validation-state.invalid { color: #b44040; }
+.validation-state div { display: flex; flex-direction: column; gap: 5px; }
+.validation-state strong { color: currentColor !important; font-size: 13px !important; }
+.validation-state span { margin: 0 !important; }
+.singbox-editor-card { overflow: hidden; height: min(680px, calc(100vh - 270px)); min-height: 430px; border: 1px solid rgba(255,255,255,.5); border-radius: 10px; background: rgba(21,31,37,.92); box-shadow: 0 20px 50px rgba(26,39,46,.15); display: flex; flex-direction: column; }
+.singbox-editor-card > header { min-height: 58px; padding: 9px 13px 9px 18px; border-bottom: 1px solid rgba(255,255,255,.09); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.singbox-editor-card > header strong,.singbox-editor-card > header span { display: block; }
+.singbox-editor-card > header strong { color: #dce7e9; font-size: 13px; }
+.singbox-editor-card > header span { margin-top: 4px; color: #7f9198; font-size: 10px; }
+.singbox-source { min-height: 0; flex: 1; display: flex; }
+.singbox-source .yaml-editor { width: 100%; }
+
+/* Mobile is an app layout: content scrolls above a labelled bottom action bar. */
+@media (max-width: 700px) {
+  .builder .app-header, .singbox-header { height: 56px; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .builder .header-actions,
+  .singbox-actions { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; height: calc(64px + env(safe-area-inset-bottom)); margin: 0; padding: 5px 6px env(safe-area-inset-bottom); border-top: 1px solid rgba(72,92,103,.14); background: rgba(248,250,250,.94); box-shadow: 0 -8px 28px rgba(28,42,50,.09); display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 2px; backdrop-filter: blur(22px); }
+  .builder .header-actions > *, .singbox-actions > * { width: 100%; min-width: 0; }
+  .builder .header-actions .n-badge, .singbox-actions .n-badge { display: block; }
+  .builder .header-actions button,
+  .singbox-actions button { width: 100% !important; height: 54px !important; padding: 4px 2px !important; flex-direction: column; justify-content: center; gap: 3px; border-radius: 8px; font-size: 10px !important; }
+  .builder .header-actions button > span,
+  .builder .header-actions button:not(.preview-button),
+  .singbox-actions button > span { font-size: 10px !important; }
+  .builder .header-actions button svg, .singbox-actions button svg { width: 18px; height: 18px; }
+  .builder .header-divider { display: none; }
+  .workspace { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+  .module-content, .rules-module { width: calc(100% - 20px); padding-top: 20px; }
+  .module-heading { margin-bottom: 14px; }
+  .module-heading h1 { font-size: 22px; }
+  .module-nav { width: min(86vw, 320px); bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .nav-visible .nav-scrim { bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .yaml-preview { inset: 56px 0 calc(64px + env(safe-area-inset-bottom)); }
+  .structured-modal,
+  .group-modal,
+  .hosts-modal,
+  .validation-modal,
+  .form-modal,
+  .item-edit-modal { width: calc(100vw - 12px) !important; max-height: calc(100dvh - 76px) !important; margin: 0; }
+  .structured-modal > .n-card__content,
+  .group-modal > .n-card__content { padding: 10px 14px !important; }
+  .structured-modal > .n-card__footer,
+  .group-modal > .n-card__footer { position: sticky; bottom: 0; z-index: 2; padding: 10px 14px !important; background: rgba(245,248,248,.96); }
+  .group-form { max-height: none; overflow: visible; padding-right: 0; }
+  .visual-form .config-field,
+  .visual-form .config-field--wide { grid-template-columns: 1fr; gap: 8px; }
+  .group-form .config-field { min-height: 88px; }
+  .group-tags { margin-bottom: 38px; }
+  .singbox-studio { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .singbox-header .app-logo { min-width: 0; }
+  .singbox-header .header-file { display: none; }
+  .singbox-main { height: calc(100vh - 120px - env(safe-area-inset-bottom)); padding: 22px 10px 28px; }
+  .singbox-intro { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .singbox-intro h1 { font-size: 25px; }
+  .singbox-intro p { font-size: 12px; }
+  .singbox-summary { grid-template-columns: repeat(2,1fr); }
+  .singbox-summary .validation-state { grid-column: 1/-1; }
+  .singbox-editor-card { height: 62vh; min-height: 430px; }
+  .singbox-editor-card > header { align-items: stretch; flex-direction: column; padding: 12px; }
+  .singbox-editor-card > header .n-button { width: 100%; }
+}

@@ -15,7 +15,7 @@ Pinia 配置文档状态
       ↓
 ConfigEngine（解析、序列化、验证）
       ↓
-Mihomo YAML / future sing-box JSON
+Mihomo YAML / sing-box JSON/JSONC
 ```
 
 - `src/core/config-engine.ts`：不同内核都要实现的稳定契约。
@@ -27,12 +27,12 @@ Mihomo YAML / future sing-box JSON
 - `src/router/`：按内核和模块组织 URL，页面组件使用懒加载。
 - `src/components/YamlEditor.vue`：隔离 CodeMirror 生命周期与 Vue 状态同步。
 
-## 接入 sing-box
+## sing-box 现状与后续可视化
 
-1. 在 `src/adapters/singbox/` 实现 `ConfigEngine`。
-2. 新增 `src/schemas/singbox.ts` 描述配置模块和表单字段。
-3. 在顶栏增加内核格式切换，按格式选择 engine 与 schema。
-4. sing-box 使用 JSON/JSONC 时，仅替换 engine，不重写编辑器组件。
+1. `src/adapters/singbox/SingBoxConfigEngine.ts` 已实现 JSON/JSONC 解析、序列化、官方 JSON Schema 与跨标签引用校验。
+2. 官方 `https://sing-box.sagernet.org/schema.json` 已固定在仓库中，部署后校验不依赖外网。
+3. `src/stores/singbox.ts` 使用独立草稿键，避免两个内核的配置相互覆盖。
+4. 下一阶段新增 `src/schemas/singbox.ts` 与入站、出站、DNS、路由可视化组件时，继续复用稳定的 `ConfigEngine`、CodeMirror 和校验结果结构。
 
 ## 性能策略
 

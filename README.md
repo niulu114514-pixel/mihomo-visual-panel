@@ -23,7 +23,7 @@
 #/mihomo/groups
 #/mihomo/dns
 #/mihomo/tun
-#/sing-box/          后续内核入口
+#/sing-box/          sing-box JSON/JSONC 校验工作台
 ```
 
 面板不会直接修改磁盘上的 YAML。只有用户主动编辑并导出时才会生成新文件；导入现有配置不会自动重排或改写代理组内容。
@@ -81,7 +81,9 @@ edgeone makers deploy ./dist -n mihomo-visual-panel
 
 ## 可维护性
 
-配置界面由 schema 驱动，YAML 解析、序列化和验证由独立的 `ConfigEngine` 实现。普通字段与代理/规则集合、隧道、监听等结构化集合共用字段定义和通用编辑器，Hosts 使用独立的映射编辑器；源码编辑由 CodeMirror 负责。后续 sing-box 接入方式见 [架构说明](docs/ARCHITECTURE.md)。
+配置界面由 schema 驱动，解析、序列化和验证由独立的 `ConfigEngine` 实现。Mihomo 代理组使用完整字段化表单，代理/规则集合、隧道、监听和 Hosts 也均可视化编辑；未知扩展字段在表单保存时原样保留。sing-box 已接入 JSON/JSONC 编辑、官方 Draft 2020-12 Schema 校验和标签引用检查。实现细节见 [架构说明](docs/ARCHITECTURE.md)。
+
+校验规则会阻止存在明确错误的配置导出。静态网页无法替代目标设备上的内核、远程订阅、文件路径和网络环境检查，上机前仍建议分别执行 `mihomo -t -f config.yaml` 或 `sing-box check -c config.json`。
 
 ## 安全说明
 
