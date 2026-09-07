@@ -171,10 +171,10 @@ function dropOn(index: number) {
           >
             <span class="rule-grip" draggable="true" title="拖动排序" @dragstart="dragIndex = row.index" @dragend="dragIndex = null"><GripVertical :size="17" /></span>
             <span class="row-index">{{ row.index + 1 }}</span>
-            <NSelect :value="row.type" :options="typeOptions(row.type)" filterable @update:value="patchRule(row, { type: String($event) })" />
-            <NInput :value="row.payload" :disabled="row.type === 'MATCH'" :placeholder="row.type === 'MATCH' ? '无需参数' : '输入匹配参数'" @update:value="patchRule(row, { payload: $event })" />
-            <NSelect :value="row.target" :options="targetOptions" filterable tag @update:value="patchRule(row, { target: String($event) })" />
-            <NCheckbox :checked="row.noResolve" :disabled="!noResolveTypes.has(row.type) && !row.noResolve" @update:checked="patchRule(row, { noResolve: $event })">no-resolve</NCheckbox>
+            <div class="rule-cell rule-cell--type"><span>规则类型</span><NSelect :value="row.type" :options="typeOptions(row.type)" filterable @update:value="patchRule(row, { type: String($event) })" /></div>
+            <div class="rule-cell rule-cell--payload"><span>匹配参数</span><NInput :value="row.payload" :disabled="row.type === 'MATCH'" :placeholder="row.type === 'MATCH' ? '无需参数' : '输入匹配参数'" @update:value="patchRule(row, { payload: $event })" /></div>
+            <div class="rule-cell rule-cell--target"><span>目标策略</span><NSelect :value="row.target" :options="targetOptions" filterable tag @update:value="patchRule(row, { target: String($event) })" /></div>
+            <div class="rule-cell rule-cell--option"><span>选项</span><NCheckbox :checked="row.noResolve" :disabled="!noResolveTypes.has(row.type) && !row.noResolve" @update:checked="patchRule(row, { noResolve: $event })">no-resolve</NCheckbox></div>
             <NPopconfirm positive-text="删除" negative-text="取消" @positive-click="remove(row.index)">
               <template #trigger><NButton quaternary circle title="删除规则"><template #icon><Trash2 :size="17" /></template></NButton></template>
               确定删除这条规则吗？

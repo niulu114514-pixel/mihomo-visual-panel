@@ -280,6 +280,15 @@ a { color: var(--blue); text-decoration: none; }
 .field-copy label { font-size: 13px; }
 .field-copy p { margin-top: 5px; font-size: 11px; line-height: 1.45; }
 .naive-switch-wrap { font-size: 12px; }
+.config-overview { margin-bottom: 16px; padding: 16px 18px; border: 1px solid var(--line-light); border-radius: 9px; background: rgba(250,252,252,.68); box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.7); backdrop-filter: blur(14px); }
+.config-overview__copy { margin-bottom: 13px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.config-overview__copy strong { color: var(--ink); font-size: 14px; }
+.config-overview__copy span { color: var(--muted); font-size: 11px; }
+.config-overview__items { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.config-overview__items a { min-height: 58px; padding: 9px 11px; border: 1px solid rgba(72,92,103,.12); border-radius: 7px; background: rgba(255,255,255,.38); display: flex; flex-direction: column; justify-content: center; transition: border-color .16s, background .16s, transform .16s; }
+.config-overview__items a:hover { border-color: rgba(49,95,119,.32); background: rgba(255,255,255,.72); transform: translateY(-1px); }
+.config-overview__items strong { color: var(--blue); font-size: 18px; line-height: 1; }
+.config-overview__items span { margin-top: 6px; color: #617078; font-size: 11px; }
 .collection-toolbar { margin-bottom: 14px; font-size: 12px; }
 .collection-search { width: 260px; }
 .card-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 13px; }
@@ -306,6 +315,8 @@ a { color: var(--blue); text-decoration: none; }
 .rules-row .row-index { color: #87969e; font-size: 12px; text-align: right; }
 .rules-row .n-select, .rules-row .n-input { min-width: 0; }
 .rules-row .n-checkbox { white-space: nowrap; font-size: 12px; }
+.rule-cell { min-width: 0; }
+.rule-cell > span { display: none; }
 .rules-row > .n-button { color: #94a1a8; }
 .rules-row > .n-button:hover { color: #c94343; background: rgba(201,67,67,.07); }
 .rules-card .empty-state { min-width: 1010px; }
@@ -315,10 +326,41 @@ a { color: var(--blue); text-decoration: none; }
 }
 
 @media (max-width: 620px) {
-  .header-actions button { width: 38px; padding: 0; }
+  .app-header { padding-inline: 10px; }
+  .app-logo { flex: 1; }
+  .app-logo > div { width: 27px; height: 27px; }
+  .app-logo strong { font-size: 13px; }
+  .header-actions { gap: 0; }
+  .header-actions button { width: 42px; height: 42px; padding: 0; }
   .module-heading h1 { font-size: 23px; }
   .module-heading p { font-size: 12px; }
+  .module-heading--actions { align-items: stretch; flex-direction: column; }
+  .module-heading--actions > .n-button { width: 100%; }
+  .config-overview { padding: 14px; }
+  .config-overview__copy { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .config-overview__items { grid-template-columns: repeat(2, 1fr); }
+  .config-overview__items a:last-child { grid-column: 1/-1; }
+  .collection-toolbar { align-items: stretch; flex-direction: column; gap: 8px; }
+  .collection-toolbar .collection-search { width: 100%; }
   .rules-toolbar { align-items: stretch; flex-direction: column; }
   .rules-toolbar .collection-search { width: 100%; }
   .card-grid { grid-template-columns: 1fr; }
+  .structured-card .card-actions .n-button { width: 38px; height: 38px; }
+  .edit-chip { min-width: 54px; height: 34px; }
+  .rules-card { overflow: visible; border: 0; background: transparent; box-shadow: none; backdrop-filter: none; }
+  .rules-table-scroll { overflow: visible; }
+  .rules-table--header { display: none; }
+  .rules-body { display: grid; gap: 12px; }
+  .rules-table.rules-row { min-width: 0; padding: 14px; border: 1px solid var(--line-light); border-radius: 9px; background: rgba(250,252,252,.72); box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.72); display: grid; grid-template-columns: 30px minmax(0,1fr) 42px; row-gap: 12px; }
+  .rule-grip { grid-column: 1; grid-row: 1; height: 40px; }
+  .rules-row .row-index { grid-column: 1; grid-row: 2; align-self: start; padding-top: 23px; text-align: center; }
+  .rule-cell { grid-column: 2/4; }
+  .rule-cell--type { grid-column: 2; grid-row: 1; }
+  .rule-cell--payload { grid-row: 2; }
+  .rule-cell--target { grid-row: 3; }
+  .rule-cell--option { grid-row: 4; }
+  .rule-cell > span { margin-bottom: 6px; display: block; color: #75848c; font-size: 11px; font-weight: 600; }
+  .rule-cell--type > span { display: none; }
+  .rules-row > .n-button { grid-column: 3; grid-row: 1; width: 42px; height: 42px; }
+  .rules-card .empty-state { min-width: 0; }
 }

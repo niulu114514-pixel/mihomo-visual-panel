@@ -65,10 +65,10 @@ Node.js: 22
 在 EdgeOne Makers 导入此 Git 仓库即可。仓库根目录的 `edgeone.json` 已声明：
 
 ```text
-Install command: pnpm install --frozen-lockfile
-Build command: pnpm build
+Install command: npx pnpm@11.19.0 install --frozen-lockfile
+Build command: npx pnpm@11.19.0 build
 Output directory: dist
-Node.js: 22.11.0
+Node.js: 22.17.1
 ```
 
 如果项目是通过 GitHub 导入的，推送 `main` 分支会自动触发部署。CLI 直接上传只适用于创建时选择“直接上传”的项目，不能覆盖 GitHub 关联型项目：

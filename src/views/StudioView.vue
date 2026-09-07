@@ -22,7 +22,7 @@ const store = useConfigStore()
 const YamlEditor = defineAsyncComponent(() => import('@/components/YamlEditor.vue'))
 const dialog = useDialog()
 const message = useMessage()
-const previewOpen = ref(true)
+const previewOpen = ref(!window.matchMedia('(max-width: 850px)').matches)
 const navOpen = ref(false)
 const validationOpen = ref(false)
 const rawEdit = ref(false)
@@ -111,25 +111,25 @@ onMounted(async () => { store.restoreDraft(); await nextTick() })
 <template>
   <div class="builder" :class="{ 'preview-closed': !previewOpen, 'nav-visible': navOpen }">
     <header class="app-header">
-      <NButton quaternary circle class="mobile-icon" aria-label="打开配置导航" @click="navOpen = true"><template #icon><Menu :size="19" /></template></NButton>
+      <NButton quaternary circle class="mobile-icon" aria-label="打开配置导航" title="打开配置导航" @click="navOpen = true"><template #icon><Menu :size="19" /></template></NButton>
       <div class="app-logo"><div><Activity :size="18" /></div><strong>Mihomo Flow</strong><span>配置工坊</span></div>
       <div class="header-file"><i :class="{ changed: store.changed }" />{{ store.fileName }}</div>
       <div class="header-actions">
-        <NButton quaternary @click="newFile"><template #icon><FilePlus2 :size="15" /></template>新建</NButton>
-        <NButton quaternary @click="fileInput?.click()"><template #icon><Upload :size="15" /></template>导入</NButton>
-        <NButton quaternary @click="exportYaml"><template #icon><Download :size="15" /></template>导出<ChevronDown :size="12" /></NButton>
+        <NButton quaternary aria-label="新建配置" title="新建配置" @click="newFile"><template #icon><FilePlus2 :size="15" /></template>新建</NButton>
+        <NButton quaternary aria-label="导入配置" title="导入配置" @click="fileInput?.click()"><template #icon><Upload :size="15" /></template>导入</NButton>
+        <NButton quaternary aria-label="导出配置" title="导出配置" @click="exportYaml"><template #icon><Download :size="15" /></template>导出<ChevronDown :size="12" /></NButton>
         <span class="header-divider" />
         <NBadge :value="store.issues.length" :show="store.issues.length > 0" :max="99">
-          <NButton quaternary @click="validationOpen = true"><template #icon><CheckCircle2 :size="15" /></template>验证</NButton>
+          <NButton quaternary aria-label="验证配置" title="验证配置" @click="validationOpen = true"><template #icon><CheckCircle2 :size="15" /></template>验证</NButton>
         </NBadge>
-        <NButton class="preview-button" :type="previewOpen ? 'primary' : 'default'" secondary @click="previewOpen = !previewOpen"><template #icon><Eye :size="15" /></template>预览</NButton>
+        <NButton class="preview-button" :type="previewOpen ? 'primary' : 'default'" secondary aria-label="切换 YAML 预览" title="切换 YAML 预览" @click="previewOpen = !previewOpen"><template #icon><Eye :size="15" /></template>预览</NButton>
       </div>
       <input ref="fileInput" class="hidden" type="file" accept=".yaml,.yml,text/yaml" @change="importFile" />
     </header>
 
     <div class="nav-scrim" @click="navOpen = false" />
     <aside class="module-nav">
-      <div class="mobile-nav-head"><strong>配置模块</strong><NButton quaternary circle @click="navOpen = false"><template #icon><X :size="18" /></template></NButton></div>
+      <div class="mobile-nav-head"><strong>配置模块</strong><NButton quaternary circle aria-label="关闭配置导航" @click="navOpen = false"><template #icon><X :size="18" /></template></NButton></div>
       <nav>
         <button v-for="item in mihomoModules" :key="item.id" :class="{ active: item.id === activeId }" @click="chooseModule(item.id)"><component :is="icons[item.icon]" :size="17" /><span>{{ item.label }}</span></button>
       </nav>
