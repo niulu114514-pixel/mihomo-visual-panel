@@ -22,7 +22,7 @@ export class MihomoConfigEngine implements ConfigEngine {
   }
 
   parse(source: string): ImportResult {
-    const document = parseDocument(source, { prettyErrors: true, uniqueKeys: false })
+    const document = parseDocument(source.replace(/^\uFEFF/, ''), { prettyErrors: true, uniqueKeys: false, merge: true })
     if (document.errors.length) throw new Error(document.errors.map((error) => error.message).join('\n'))
     const value = document.toJS() as unknown
     if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('配置根节点必须是 YAML 对象')

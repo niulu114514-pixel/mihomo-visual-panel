@@ -68,7 +68,8 @@ async function importFile(event: Event) {
   try {
     store.importYaml(await file.text(), file.name)
     await router.push('/mihomo/general')
-    message.success(`已导入 ${file.name}`)
+    const count = (key: string) => Array.isArray(store.get(key)) ? (store.get(key) as unknown[]).length : 0
+    message.success(`已读取 ${file.name}：${count('proxies')} 个节点、${count('proxy-groups')} 个代理组、${count('rules')} 条规则`, { duration: 5000 })
   } catch (cause) {
     message.error(cause instanceof Error ? cause.message : '导入失败', { duration: 5000 })
   } finally {

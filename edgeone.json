@@ -3,5 +3,5 @@
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm build",
   "outputDirectory": "./dist",
-  "nodeVersion": "22.17.1"
+  "nodeVersion": "22.11.0"
 }

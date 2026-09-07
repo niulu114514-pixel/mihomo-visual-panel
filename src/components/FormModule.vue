@@ -8,7 +8,7 @@ import { useConfigStore } from '@/stores/config'
 
 const props = defineProps<{ module: ConfigModuleSchema }>()
 const store = useConfigStore()
-const defaultExpanded = computed(() => props.module.sections?.filter((section) => section.defaultOpen).map((section) => section.id) ?? [])
+const defaultExpanded = computed(() => props.module.sections?.map((section) => section.id) ?? [])
 </script>
 
 <template>

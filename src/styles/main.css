@@ -260,3 +260,65 @@ a { color: var(--blue); text-decoration: none; }
   .host-actions { grid-column: 2; grid-row: 1; }
 }
 @media (max-width: 430px) { .card-grid { grid-template-columns: 1fr; }.module-heading { min-height: 65px; }.module-heading h1 { font-size: 20px; } }
+
+/* Readability pass: roomier cards and controls without changing the restrained visual language. */
+.app-logo strong { font-size: 15px; }
+.app-logo span { font-size: 11px; }
+.header-file { font-size: 12px; }
+.header-actions button { height: 38px; padding-inline: 11px; font-size: 13px; }
+.module-nav nav button { height: 43px; font-size: 13px; }
+.nav-footer strong { font-size: 12px; }
+.nav-footer small, .nav-footer p { font-size: 10px; }
+.module-content { width: min(920px, calc(100% - 56px)); padding-top: 32px; }
+.module-heading { min-height: 78px; }
+.module-heading h1 { margin-bottom: 8px; font-size: 26px; }
+.module-heading p { font-size: 13px; line-height: 1.6; }
+.schema-collapse .n-collapse-item { margin-bottom: 11px !important; }
+.schema-collapse .n-collapse-item__header { min-height: 52px; padding-inline: 18px !important; }
+.section-description { font-size: 12px; }
+.config-field { min-height: 94px; padding-block: 16px; gap: 18px; }
+.field-copy label { font-size: 13px; }
+.field-copy p { margin-top: 5px; font-size: 11px; line-height: 1.45; }
+.naive-switch-wrap { font-size: 12px; }
+.collection-toolbar { margin-bottom: 14px; font-size: 12px; }
+.collection-search { width: 260px; }
+.card-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 13px; }
+.item-card { min-height: 138px; padding: 18px; }
+.item-card h3 { margin: 14px 34px 7px 0; font-size: 15px; }
+.item-card p { font-size: 11px; }
+.item-type { padding: 4px 7px; font-size: 10px; }
+.edit-chip { height: 28px; padding-inline: 9px; font-size: 11px; }
+
+/* Structured rules table. */
+.rules-module { width: min(1180px, calc(100% - 44px)); }
+.rules-toolbar { margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.rules-toolbar__left { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 13px; white-space: nowrap; }
+.rules-card { overflow: hidden; }
+.rules-table-scroll { overflow-x: auto; }
+.rules-table { min-width: 1010px; display: grid; grid-template-columns: 28px 38px minmax(250px, 1.45fr) minmax(210px, 1fr) minmax(170px, .82fr) 126px 42px; align-items: center; column-gap: 8px; }
+.rules-table--header { min-height: 46px; padding: 0 12px; border-bottom: 1px solid rgba(72,92,103,.12); color: #7a8991; font-size: 12px; font-weight: 600; }
+.rules-row { min-height: 58px; padding: 8px 12px; border-bottom: 1px solid rgba(72,92,103,.1); transition: background .15s, opacity .15s; }
+.rules-row:last-child { border-bottom: 0; }
+.rules-row:hover { background: rgba(255,255,255,.34); }
+.rules-row.dragging { opacity: .45; }
+.rule-grip { height: 34px; display: grid; place-items: center; color: #a9b4ba; cursor: grab; }
+.rule-grip:active { cursor: grabbing; }
+.rules-row .row-index { color: #87969e; font-size: 12px; text-align: right; }
+.rules-row .n-select, .rules-row .n-input { min-width: 0; }
+.rules-row .n-checkbox { white-space: nowrap; font-size: 12px; }
+.rules-row > .n-button { color: #94a1a8; }
+.rules-row > .n-button:hover { color: #c94343; background: rgba(201,67,67,.07); }
+.rules-card .empty-state { min-width: 1010px; }
+
+@media (max-width: 850px) {
+  .module-content, .rules-module { width: min(920px, calc(100% - 32px)); }
+}
+
+@media (max-width: 620px) {
+  .header-actions button { width: 38px; padding: 0; }
+  .module-heading h1 { font-size: 23px; }
+  .module-heading p { font-size: 12px; }
+  .rules-toolbar { align-items: stretch; flex-direction: column; }
+  .rules-toolbar .collection-search { width: 100%; }
+  .card-grid { grid-template-columns: 1fr; }
+}
