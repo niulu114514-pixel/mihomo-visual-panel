@@ -25,9 +25,9 @@ function createEditor() {
         EditorState.readOnly.of(!props.editable),
         EditorView.editable.of(Boolean(props.editable)),
         EditorView.theme({
-          '&': { height: '100%', backgroundColor: '#18253a' },
+          '&': { height: '100%', backgroundColor: 'transparent' },
           '.cm-scroller': { overflow: 'auto', fontFamily: '"Cascadia Code", Consolas, monospace', fontSize: '11px', lineHeight: '1.75' },
-          '.cm-gutters': { backgroundColor: '#18253a', borderRight: '1px solid rgba(255,255,255,.06)', color: '#52627a' },
+          '.cm-gutters': { backgroundColor: 'rgba(15,24,29,.2)', borderRight: '1px solid rgba(255,255,255,.06)', color: '#63757e' },
           '.cm-activeLine, .cm-activeLineGutter': { backgroundColor: 'rgba(255,255,255,.025)' },
           '.cm-content': { padding: '14px 0 36px' },
         }),

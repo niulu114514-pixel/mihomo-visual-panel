@@ -12,12 +12,14 @@ import {
 
 const themeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#2563eb',
-    primaryColorHover: '#3b73ed',
-    primaryColorPressed: '#1d4ed8',
-    primaryColorSuppl: '#2563eb',
-    borderRadius: '7px',
+    primaryColor: '#315f77',
+    primaryColorHover: '#254e65',
+    primaryColorPressed: '#1d4055',
+    primaryColorSuppl: '#315f77',
+    borderRadius: '6px',
     fontSize: '12px',
+    boxShadow1: '0 1px 2px rgba(31, 45, 54, 0.05)',
+    boxShadow2: '0 12px 34px rgba(31, 45, 54, 0.13)',
   },
   Button: { heightMedium: '34px', fontSizeMedium: '11px' },
   Input: { heightMedium: '36px', fontSizeMedium: '11px' },
