@@ -16,6 +16,8 @@ import RawModuleEditor from '@/components/RawModuleEditor.vue'
 import StructuredCollectionEditor from '@/components/StructuredCollectionEditor.vue'
 import { mihomoModules } from '@/schemas/mihomo'
 import { useConfigStore } from '@/stores/config'
+import { sourceLineForPath } from '@/utils/source-location'
+import type { ValidationIssue } from '@/core/config-engine'
 
 const route = useRoute()
 const router = useRouter()
@@ -30,6 +32,7 @@ const rawEdit = ref(false)
 const rawSource = ref('')
 const rawError = ref('')
 const fileInput = ref<HTMLInputElement | null>(null)
+const previewFocusLine = ref(1)
 
 const activeId = computed(() => String(route.params.moduleId || 'general'))
 const activeModule = computed(() => mihomoModules.find((item) => item.id === activeId.value) ?? mihomoModules[0]!)
@@ -40,6 +43,33 @@ const icons: Record<string, typeof Settings2> = {
 }
 const errorCount = computed(() => store.issues.filter((item) => item.level === 'error').length)
 const yamlLineCount = computed(() => store.yaml.split('\n').length)
+const previewMarkers = computed(() => store.issues.map((issue) => ({ line: sourceLineForPath(store.yaml, issue.path, 'yaml'), level: issue.level })))
+
+function modulePath(module = activeModule.value) {
+  if (module.rootKey) return module.rootKey
+  return module.sections?.flatMap((section) => section.fields).find((field) => store.get(field.path) !== undefined)?.path
+    ?? module.sections?.[0]?.fields[0]?.path
+    ?? '$'
+}
+
+function moduleForPath(path: string) {
+  const root = path.split('.')[0] || ''
+  return mihomoModules.find((module) => module.rootKey === root || module.sections?.some((section) => section.fields.some((field) => field.path === root || field.path.startsWith(`${root}.`))))
+    ?? mihomoModules[0]!
+}
+
+function focusPreview(path: string) {
+  previewOpen.value = true
+  previewFocusLine.value = sourceLineForPath(store.yaml, path, 'yaml')
+}
+
+async function jumpToIssue(issue: ValidationIssue) {
+  validationOpen.value = false
+  const module = moduleForPath(issue.path)
+  await router.push(`/mihomo/${module.id}`)
+  await nextTick()
+  focusPreview(issue.path)
+}
 
 function chooseModule(id: string) {
   navOpen.value = false
@@ -110,8 +140,8 @@ function applyRaw() {
   }
 }
 
-watch(() => route.params.moduleId, () => { navOpen.value = false })
-onMounted(async () => { store.restoreDraft(); await nextTick() })
+watch(() => route.params.moduleId, async () => { navOpen.value = false; await nextTick(); focusPreview(modulePath()) })
+onMounted(async () => { store.restoreDraft(); await nextTick(); focusPreview(modulePath()) })
 </script>
 
 <template>
@@ -164,14 +194,14 @@ onMounted(async () => { store.restoreDraft(); await nextTick() })
           <NButton size="tiny" ghost circle class="preview-close" aria-label="关闭预览" @click="previewOpen = false"><template #icon><X :size="14" /></template></NButton>
         </div>
       </header>
-      <YamlEditor :model-value="rawEdit ? rawSource : store.yaml" :editable="rawEdit" @update:model-value="rawSource = $event" />
+      <YamlEditor :model-value="rawEdit ? rawSource : store.yaml" :editable="rawEdit" :focus-line="previewFocusLine" :markers="previewMarkers" @update:model-value="rawSource = $event" />
       <div v-if="rawError" class="raw-error">{{ rawError }}</div>
       <footer v-if="rawEdit"><NButton type="primary" block @click="applyRaw">应用 YAML</NButton></footer>
     </aside>
 
     <NModal v-model:show="validationOpen" preset="card" title="配置验证" class="validation-modal" :bordered="false">
       <div v-if="!store.issues.length" class="validation-ok"><CheckCircle2 :size="36" /><strong>Mihomo 配置校验通过</strong><span>YAML 语法、字段类型、端口和策略引用均未发现问题</span></div>
-      <div v-else class="issue-list"><div v-for="(issue,index) in store.issues" :key="index" :class="issue.level"><CircleAlert :size="17" /><span><strong>{{ issue.path }}</strong>{{ issue.message }}</span></div></div>
+      <div v-else class="issue-list"><button v-for="(issue,index) in store.issues" :key="index" type="button" :class="issue.level" @click="jumpToIssue(issue)"><CircleAlert :size="17" /><span><strong>{{ issue.path }}</strong>{{ issue.message }}</span><small>定位到第 {{ sourceLineForPath(store.yaml, issue.path, 'yaml') }} 行</small></button></div>
       <template #footer><div class="validation-footer"><span>{{ errorCount }} 个错误，{{ store.issues.length - errorCount }} 个提醒</span><NButton type="primary" @click="validationOpen = false">完成</NButton></div></template>
     </NModal>
   </div>

@@ -18,6 +18,14 @@ const templates: RuleSetTemplate[] = [
   { tag: 'geosite-google', label: 'Google', description: 'Google 服务域名', repo: 'geosite' },
   { tag: 'geosite-youtube', label: 'YouTube', description: 'YouTube 服务域名', repo: 'geosite' },
   { tag: 'geosite-github', label: 'GitHub', description: 'GitHub 相关域名', repo: 'geosite' },
+  { tag: 'geosite-telegram', label: 'Telegram', description: 'Telegram 服务域名', repo: 'geosite' },
+  { tag: 'geoip-telegram', label: 'Telegram IP', description: 'Telegram IP 地址段', repo: 'geoip' },
+  { tag: 'geosite-microsoft', label: 'Microsoft', description: 'Microsoft 服务域名', repo: 'geosite' },
+  { tag: 'geosite-apple', label: 'Apple', description: 'Apple 服务域名', repo: 'geosite' },
+  { tag: 'geosite-netflix', label: 'Netflix', description: 'Netflix 流媒体域名', repo: 'geosite' },
+  { tag: 'geosite-disney', label: 'Disney+', description: 'Disney+ 流媒体域名', repo: 'geosite' },
+  { tag: 'geosite-spotify', label: 'Spotify', description: 'Spotify 音乐服务域名', repo: 'geosite' },
+  { tag: 'geosite-steam', label: 'Steam', description: 'Steam 游戏平台域名', repo: 'geosite' },
 ]
 
 const store = useSingBoxStore()
@@ -76,6 +84,5 @@ function move(index: number, offset: number) { const target = index + offset; if
     <NModal v-model:show="dialogOpen" preset="card" :title="`${editingIndex===null?'添加':'编辑'}规则集`" class="structured-modal singbox-visual-modal" :bordered="false"><NAlert type="info" :bordered="false">远程二进制规则集使用 .srs；1.14 推荐通过 HTTP Client 控制下载路径。</NAlert><div class="visual-form singbox-modal-form"><div class="config-field"><div class="field-copy"><label>规则集类型</label><p>远程、本地文件或内联规则</p></div><NSelect :value="String(draft.type||'remote')" :options="['remote','local','inline'].map(value=>({label:value,value}))" @update:value="changeType" /></div><ConfigField :field="{path:'tag',label:'规则集标签',type:'text',placeholder:'geosite-cn',description:'必须唯一，路由规则通过标签引用'}" :model-value="draft.tag" @update:model-value="patch('tag',$event)" /><template v-if="draft.type!=='inline'"><ConfigField :field="{path:'format',label:'文件格式',type:'select',options:['binary','source'].map(value=>({label:value,value}))}" :model-value="draft.format" @update:model-value="patch('format',$event)" /></template><template v-if="draft.type==='remote'"><ConfigField :field="{path:'url',label:'远程地址',type:'text',placeholder:'https://example.com/rules.srs'}" :model-value="draft.url" @update:model-value="patch('url',$event)" /><ConfigField :field="{path:'initial_path',label:'初始文件路径',type:'text',placeholder:'./rules/default.srs'}" :model-value="draft.initial_path" @update:model-value="patch('initial_path',$event)" /><ConfigField :field="{path:'update_interval',label:'更新间隔',type:'text',placeholder:'1d'}" :model-value="draft.update_interval" @update:model-value="patch('update_interval',$event)" /><div class="config-field"><div class="field-copy"><label>HTTP Client</label><p>可选已有的下载客户端</p></div><NSelect clearable filterable tag :value="draft.http_client ? String(draft.http_client) : null" :options="httpClients" placeholder="使用默认客户端" @update:value="patch('http_client',$event)" /></div></template><ConfigField v-if="draft.type==='local'" :field="{path:'path',label:'本地路径',type:'text',placeholder:'./rules/local.srs'}" :model-value="draft.path" @update:model-value="patch('path',$event)" /><div v-if="draft.type==='inline'" class="config-field config-field--wide"><div class="field-copy"><label>内联规则</label><p>复杂 Headless Rule 建议在源码页编辑，已有内容会保留</p></div><NInput type="textarea" readonly :value="JSON.stringify(draft.rules||[],null,2)" :autosize="{minRows:4,maxRows:10}" /></div></div><template #footer><div class="modal-actions"><NButton @click="dialogOpen=false">取消</NButton><NButton type="primary" @click="save">保存规则集</NButton></div></template></NModal>
   </section>
 </template>
-
 
 

@@ -20,7 +20,7 @@ export function writePath(root: Record<string, unknown>, path: string, value: un
   let cursor = next
   keys.forEach((key, index) => {
     if (index === keys.length - 1) {
-      if (value === undefined || value === '' || (Array.isArray(value) && !value.length)) delete cursor[key]
+      if (value === undefined || value === null || value === '' || (Array.isArray(value) && !value.length)) delete cursor[key]
       else cursor[key] = value
       return
     }

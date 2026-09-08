@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { ExternalLink } from '@lucide/vue'
 import { NCollapse, NCollapseItem } from 'naive-ui'
 import ConfigField from './ConfigField.vue'
+import VisualValueEditor from './VisualValueEditor.vue'
 import type { ConfigModuleSchema } from '@/schemas/types'
 import { useConfigStore } from '@/stores/config'
 
@@ -27,6 +28,11 @@ const overviewItems = computed(() => [
   { label: '规则集合', count: itemCount('rule-providers'), to: '/mihomo/rule-providers' },
   { label: '路由规则', count: itemCount('rules'), to: '/mihomo/rules' },
 ])
+
+const completeConfig = computed({
+  get: () => store.config as Record<string, unknown>,
+  set: (value: Record<string, unknown>) => store.replaceConfig(value),
+})
 </script>
 
 <template>
@@ -44,6 +50,10 @@ const overviewItems = computed(() => [
         <div class="section-fields">
           <ConfigField v-for="field in section.fields" :key="field.path" :field="field" :model-value="store.get(field.path)" @update:model-value="store.set(field.path, $event)" />
         </div>
+      </NCollapseItem>
+      <NCollapseItem v-if="module.id === 'general'" name="complete-config" title="完整配置树（所有字段）">
+        <p class="complete-editor-note">可视化编辑当前配置中的任意顶层字段、嵌套对象和数组；协议专属与未来新增字段也不会遗漏。</p>
+        <VisualValueEditor v-model="completeConfig" root />
       </NCollapseItem>
     </NCollapse>
   </div>

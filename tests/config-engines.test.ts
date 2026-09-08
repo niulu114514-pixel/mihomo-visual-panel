@@ -45,6 +45,15 @@ describe('MihomoConfigEngine', () => {
     })
     expect(issues.some((issue) => issue.message.includes('循环引用'))).toBe(true)
   })
+
+  it('rejects non-object proxy and proxy-group entries', () => {
+    const issues = engine.validate({
+      proxies: ['invalid'],
+      'proxy-groups': [null, { name: 'valid', type: 'select', proxies: ['DIRECT'] }],
+    })
+    expect(issues.some((issue) => issue.path === 'proxies.0')).toBe(true)
+    expect(issues.some((issue) => issue.path === 'proxy-groups.0')).toBe(true)
+  })
 })
 
 describe('SingBoxConfigEngine', () => {

@@ -86,6 +86,17 @@ export class MihomoConfigEngine implements ConfigEngine {
       if (expected === 'array' ? !Array.isArray(value) : !isRecord(value)) add('error', key, `该配置必须是${expected === 'array' ? '数组' : '对象'}`)
     }
 
+    if (Array.isArray(config.proxies)) {
+      config.proxies.forEach((value, index) => {
+        if (!isRecord(value)) add('error', `proxies.${index}`, '代理节点配置必须是对象')
+      })
+    }
+    if (Array.isArray(config['proxy-groups'])) {
+      config['proxy-groups'].forEach((value, index) => {
+        if (!isRecord(value)) add('error', `proxy-groups.${index}`, '代理组配置必须是对象')
+      })
+    }
+
     const proxies = asRecords(config.proxies)
     const groups = asRecords(config['proxy-groups'])
     const proxyProviders = isRecord(config['proxy-providers']) ? config['proxy-providers'] : {}

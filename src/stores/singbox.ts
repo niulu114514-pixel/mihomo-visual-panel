@@ -38,6 +38,11 @@ export const useSingBoxStore = defineStore('sing-box-config', () => {
 
   function setRoot(key: string, value: unknown) { set(key, value) }
 
+  function replaceConfig(value: ConfigDocument) {
+    config.value = JSON.parse(JSON.stringify(value)) as ConfigDocument
+    saveDraft()
+  }
+
   function saveDraft() {
     changed.value = true
     localStorage.setItem(DRAFT_KEY, source.value)
@@ -82,5 +87,5 @@ export const useSingBoxStore = defineStore('sing-box-config', () => {
     changed.value = false
   }
 
-  return { config, fileName, changed, source, issues, get, set, setRoot, newConfig, applySource, importJson, restoreDraft, download }
+  return { config, fileName, changed, source, issues, get, set, setRoot, replaceConfig, newConfig, applySource, importJson, restoreDraft, download }
 })

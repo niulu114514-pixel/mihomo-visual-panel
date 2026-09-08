@@ -17,6 +17,14 @@ export const mihomoRuleProviderTemplates: MihomoRuleProviderTemplate[] = [
   { name: 'openai-domain', label: 'OpenAI', description: 'OpenAI 相关域名', behavior: 'domain', category: 'geosite', code: 'openai' },
   { name: 'github-domain', label: 'GitHub', description: 'GitHub 相关域名', behavior: 'domain', category: 'geosite', code: 'github' },
   { name: 'youtube-domain', label: 'YouTube', description: 'YouTube 相关域名', behavior: 'domain', category: 'geosite', code: 'youtube' },
+  { name: 'google-domain', label: 'Google', description: 'Google 服务域名', behavior: 'domain', category: 'geosite', code: 'google' },
+  { name: 'telegram-domain', label: 'Telegram 域名', description: 'Telegram 服务域名', behavior: 'domain', category: 'geosite', code: 'telegram' },
+  { name: 'microsoft-domain', label: 'Microsoft', description: 'Microsoft 服务域名', behavior: 'domain', category: 'geosite', code: 'microsoft' },
+  { name: 'apple-domain', label: 'Apple', description: 'Apple 服务域名', behavior: 'domain', category: 'geosite', code: 'apple' },
+  { name: 'netflix-domain', label: 'Netflix', description: 'Netflix 流媒体域名', behavior: 'domain', category: 'geosite', code: 'netflix' },
+  { name: 'disney-domain', label: 'Disney+', description: 'Disney+ 流媒体域名', behavior: 'domain', category: 'geosite', code: 'disney' },
+  { name: 'spotify-domain', label: 'Spotify', description: 'Spotify 音乐服务域名', behavior: 'domain', category: 'geosite', code: 'spotify' },
+  { name: 'steam-domain', label: 'Steam', description: 'Steam 游戏平台域名', behavior: 'domain', category: 'geosite', code: 'steam' },
   { name: 'telegram-ip', label: 'Telegram IP', description: 'Telegram IP 地址段', behavior: 'ipcidr', category: 'geoip', code: 'telegram' },
 ]
 

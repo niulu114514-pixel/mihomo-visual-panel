@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { ArrowDown, ArrowUp, ExternalLink, Pencil, Plus, Sparkles, Trash2 } from '@lucide/vue'
-import { NAlert, NButton, NInput, NModal, NPopconfirm, NSelect, useMessage } from 'naive-ui'
+import { NAlert, NButton, NCollapse, NCollapseItem, NInput, NModal, NPopconfirm, NSelect, useMessage } from 'naive-ui'
 import ConfigField from './ConfigField.vue'
+import VisualValueEditor from './VisualValueEditor.vue'
 import type { ConfigModuleSchema } from '@/schemas/types'
 import { createMihomoRuleProvider, mihomoRuleProviderTemplates, type MihomoRuleProviderTemplate } from '@/schemas/mihomo-rule-templates'
 import { structuredModuleSchemas } from '@/schemas/structured'
@@ -58,7 +59,7 @@ function writePath(path: string, value: unknown) {
   let cursor = next
   keys.forEach((key, index) => {
     if (index === keys.length - 1) {
-      if (value === undefined || value === '') delete cursor[key]
+      if (value === undefined || value === null || value === '') delete cursor[key]
       else cursor[key] = value
       return
     }
@@ -192,7 +193,7 @@ function summary(item: ItemView) {
       <div class="rule-template-grid"><button v-for="template in mihomoRuleProviderTemplates" :key="template.name" type="button" :class="{ added: ruleTemplateAdded(template) }" @click="addRuleTemplate(template)"><span>{{ template.label }}</span><small>{{ ruleTemplateAdded(template) ? '已添加' : template.description }}</small></button></div>
     </section>
     <section v-if="shown.length" class="card-grid">
-      <article v-for="item in shown" :key="item.id" class="item-card structured-card editable-card" role="group" :aria-label="`编辑${title(item)}`" tabindex="0" @click="openEdit(item)" @keydown.enter="openEdit(item)">
+      <article v-for="item in shown" :key="item.id" class="item-card structured-card editable-card" role="group" :aria-label="`编辑${title(item)}`" tabindex="0" @click="openEdit(item)" @keydown.enter.self="openEdit(item)">
         <div class="item-type">{{ itemObject(item).type || module.id }}</div>
         <h3>{{ title(item) }}</h3>
         <p>{{ summary(item) }}</p>
@@ -223,6 +224,7 @@ function summary(item: ItemView) {
         </template>
       </div>
       <NAlert v-if="editingIndex !== null || editingKey" type="info" :bordered="false">表单未展示的协议专属字段会原样保留，可继续通过右侧“源码编辑”处理高级配置。</NAlert>
+      <NCollapse class="full-field-collapse"><NCollapseItem title="全部字段（完整可视化）" name="all"><VisualValueEditor v-model="draft" root /></NCollapseItem></NCollapse>
       <template #footer><div class="modal-actions"><NButton @click="dialogOpen = false">取消</NButton><NButton type="primary" @click="save">保存</NButton></div></template>
     </NModal>
   </div>

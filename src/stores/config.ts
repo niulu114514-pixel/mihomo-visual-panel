@@ -53,6 +53,11 @@ export const useConfigStore = defineStore('config', () => {
 
   function setRoot(key: string, value: unknown) { set(key, value) }
 
+  function replaceConfig(value: ConfigDocument) {
+    config.value = JSON.parse(JSON.stringify(value)) as ConfigDocument
+    touch()
+  }
+
   function newConfig() {
     config.value = engine.createEmpty()
     fileName.value = 'config.yaml'
@@ -94,5 +99,5 @@ export const useConfigStore = defineStore('config', () => {
     changed.value = false
   }
 
-  return { config, fileName, changed, yaml, issues, importWarnings, get, set, setRoot, newConfig, importYaml, applyRaw, restoreDraft, download }
+  return { config, fileName, changed, yaml, issues, importWarnings, get, set, setRoot, replaceConfig, newConfig, importYaml, applyRaw, restoreDraft, download }
 })
