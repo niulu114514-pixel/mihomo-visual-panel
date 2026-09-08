@@ -383,9 +383,10 @@ a { color: var(--blue); text-decoration: none; }
 .singbox-intro p { max-width: 700px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
 .singbox-intro > a { flex: 0 0 auto; font-size: 12px; }
 .singbox-summary { margin-bottom: 16px; display: grid; grid-template-columns: repeat(4, minmax(110px,1fr)) minmax(180px,1.25fr); gap: 10px; }
-.singbox-summary article { min-height: 76px; padding: 14px 16px; border: 1px solid var(--line-light); border-radius: 9px; background: rgba(250,252,252,.68); box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.7); display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(14px); }
-.singbox-summary article > strong { color: var(--blue); font-size: 22px; line-height: 1; }
-.singbox-summary article > span { margin-top: 8px; color: var(--muted); font-size: 11px; }
+.singbox-summary button { min-height: 76px; padding: 14px 16px; border: 1px solid var(--line-light); border-radius: 9px; background: rgba(250,252,252,.68); box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.7); display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(14px); cursor: pointer; text-align: left; transition: border-color .16s, background .16s, transform .16s; }
+.singbox-summary button:hover,.singbox-summary button.active { border-color: rgba(49,95,119,.32); background: rgba(255,255,255,.86); transform: translateY(-1px); }
+.singbox-summary button > strong { color: var(--blue); font-size: 22px; line-height: 1; }
+.singbox-summary button > span { margin-top: 8px; color: var(--muted); font-size: 11px; }
 .singbox-summary .validation-state { flex-direction: row; align-items: center; justify-content: flex-start; gap: 10px; color: #3b7354; }
 .validation-state.invalid { color: #b44040; }
 .validation-state div { display: flex; flex-direction: column; gap: 5px; }
@@ -398,6 +399,34 @@ a { color: var(--blue); text-decoration: none; }
 .singbox-editor-card > header span { margin-top: 4px; color: #7f9198; font-size: 10px; }
 .singbox-source { min-height: 0; flex: 1; display: flex; }
 .singbox-source .yaml-editor { width: 100%; }
+.singbox-section-nav { position: sticky; top: -1px; z-index: 8; margin-bottom: 16px; padding: 5px; border: 1px solid var(--line-light); border-radius: 10px; background: rgba(245,248,248,.82); box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.75); display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 3px; backdrop-filter: blur(18px); }
+.singbox-section-nav button { min-width: 0; height: 42px; padding: 0 9px; border: 0; border-radius: 7px; background: transparent; color: #5e6f78; display: flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; font-size: 12px; white-space: nowrap; }
+.singbox-section-nav button:hover { background: rgba(255,255,255,.62); color: var(--ink); }
+.singbox-section-nav button.active { background: #fff; color: var(--blue); box-shadow: 0 3px 12px rgba(28,47,56,.08); font-weight: 600; }
+.singbox-module-panel { min-height: 430px; padding: 22px; border: 1px solid var(--line-light); border-radius: 10px; background: rgba(249,251,251,.72); box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.78); backdrop-filter: blur(18px); }
+.singbox-module-heading { min-height: 58px; margin-bottom: 18px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.singbox-module-heading h2 { margin: 0 0 7px; color: var(--ink); font-size: 21px; letter-spacing: -.35px; }
+.singbox-module-heading p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.singbox-module-heading .heading-actions { display: flex; gap: 8px; }
+.singbox-form-card { overflow: hidden; margin-bottom: 18px; padding: 0 18px; }
+.singbox-card-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(245px,1fr)); gap: 13px; }
+.singbox-item-card { min-height: 146px; }
+.singbox-item-card p { min-height: 17px; }
+.singbox-visual-modal { width: min(760px,calc(100vw - 32px)); }
+.singbox-visual-modal > .n-card__content > .n-alert { margin-bottom: 10px; }
+.singbox-modal-form { max-height: min(64vh,700px); overflow: auto; padding-right: 5px; }
+.singbox-dns-settings { margin-bottom: 20px; }
+.rule-template-panel { margin-bottom: 18px; padding: 15px; border: 1px solid rgba(72,92,103,.12); border-radius: 9px; background: rgba(255,255,255,.4); }
+.rule-template-panel > header { margin-bottom: 12px; display: flex; align-items: center; gap: 9px; color: var(--blue); }
+.rule-template-panel > header div { display: flex; flex-direction: column; gap: 3px; }
+.rule-template-panel > header strong { color: var(--ink); font-size: 13px; }
+.rule-template-panel > header span { color: var(--muted); font-size: 10px; }
+.rule-template-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(145px,1fr)); gap: 7px; }
+.rule-template-grid button { min-height: 58px; padding: 9px 11px; border: 1px solid rgba(72,92,103,.13); border-radius: 7px; background: rgba(249,251,251,.78); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; cursor: pointer; text-align: left; }
+.rule-template-grid button:hover { border-color: rgba(49,95,119,.34); background: #fff; }
+.rule-template-grid button.added { background: rgba(49,95,119,.07); cursor: default; }
+.rule-template-grid button span { color: var(--ink); font-size: 12px; font-weight: 600; }
+.rule-template-grid button small { margin-top: 4px; color: var(--muted); font-size: 9px; }
 
 /* Mobile is an app layout: content scrolls above a labelled bottom action bar. */
 @media (max-width: 700px) {
@@ -444,6 +473,15 @@ a { color: var(--blue); text-decoration: none; }
   .singbox-intro p { font-size: 12px; }
   .singbox-summary { grid-template-columns: repeat(2,1fr); }
   .singbox-summary .validation-state { grid-column: 1/-1; }
+  .singbox-section-nav { overflow-x: auto; grid-template-columns: repeat(7,minmax(112px,1fr)); scroll-snap-type: x proximity; }
+  .singbox-section-nav button { scroll-snap-align: start; }
+  .singbox-module-panel { min-height: 360px; padding: 15px 12px; }
+  .singbox-module-heading { align-items: stretch; flex-direction: column; gap: 12px; }
+  .singbox-module-heading h2 { font-size: 20px; }
+  .singbox-module-heading .heading-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .singbox-card-grid,.rule-template-grid { grid-template-columns: 1fr; }
+  .singbox-form-card { padding: 0 12px; }
+  .singbox-modal-form { max-height: none; overflow: visible; padding-right: 0; }
   .singbox-editor-card { height: 62vh; min-height: 430px; }
   .singbox-editor-card > header { align-items: stretch; flex-direction: column; padding: 12px; }
   .singbox-editor-card > header .n-button { width: 100%; }

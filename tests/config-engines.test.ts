@@ -51,4 +51,49 @@ describe('SingBoxConfigEngine', () => {
     expect(issues.some((issue) => issue.message.includes('不受支持'))).toBe(true)
     expect(issues.some((issue) => issue.path === 'route.final' && issue.message.includes('不存在'))).toBe(true)
   })
+
+  it('accepts visual proxy groups, DNS, rule sets and route rules', () => {
+    const issues = engine.validate({
+      log: { level: 'info', timestamp: true },
+      http_clients: [{ tag: 'rule-set-download', engine: 'go' }],
+      inbounds: [{ type: 'mixed', tag: 'mixed-in', listen: '::', listen_port: 7890 }],
+      outbounds: [
+        { type: 'direct', tag: 'direct' },
+        { type: 'selector', tag: 'proxy', outbounds: ['direct'], default: 'direct' },
+        { type: 'urltest', tag: 'auto', outbounds: ['proxy'], url: 'https://www.gstatic.com/generate_204', interval: '3m', tolerance: 50 },
+      ],
+      dns: {
+        servers: [
+          { type: 'local', tag: 'local' },
+          { type: 'https', tag: 'cloudflare', server: '1.1.1.1', server_port: 443, path: '/dns-query', tls: { enabled: true, server_name: 'cloudflare-dns.com' } },
+        ],
+        final: 'local',
+        strategy: 'prefer_ipv4',
+      },
+      route: {
+        rule_set: [{ type: 'remote', tag: 'geosite-cn', format: 'binary', url: 'https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs', update_interval: '1d' }],
+        rules: [{ rule_set: 'geosite-cn', inbound: 'mixed-in', action: 'route', outbound: 'direct' }],
+        final: 'proxy',
+        default_http_client: 'rule-set-download',
+        auto_detect_interface: true,
+      },
+    })
+    expect(issues).toEqual([])
+  })
+
+  it('detects missing tags and cyclic nested proxy groups', () => {
+    const issues = engine.validate({
+      inbounds: [{ type: 'mixed', tag: 'mixed-in', listen_port: 7890 }],
+      outbounds: [
+        { type: 'selector', tag: 'group-a', outbounds: ['group-b'] },
+        { type: 'urltest', tag: 'group-b', outbounds: ['group-a'] },
+      ],
+      dns: { servers: [{ type: 'local', tag: 'local' }], rules: [{ rule_set: 'missing-set', action: 'route', server: 'missing-dns' }] },
+      route: { rules: [{ inbound: 'missing-in', rule_set: 'missing-set', action: 'route', outbound: 'missing-out' }], final: 'group-a' },
+    })
+    expect(issues.some((issue) => issue.message.includes('循环引用'))).toBe(true)
+    expect(issues.some((issue) => issue.path === 'route.rules.0.rule_set')).toBe(true)
+    expect(issues.some((issue) => issue.path === 'route.rules.0.inbound')).toBe(true)
+    expect(issues.some((issue) => issue.path === 'dns.rules.0.server')).toBe(true)
+  })
 })

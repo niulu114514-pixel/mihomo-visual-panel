@@ -27,12 +27,14 @@ Mihomo YAML / sing-box JSON/JSONC
 - `src/router/`：按内核和模块组织 URL，页面组件使用懒加载。
 - `src/components/YamlEditor.vue`：隔离 CodeMirror 生命周期与 Vue 状态同步。
 
-## sing-box 现状与后续可视化
+## sing-box 可视化
 
-1. `src/adapters/singbox/SingBoxConfigEngine.ts` 已实现 JSON/JSONC 解析、序列化、官方 JSON Schema 与跨标签引用校验。
+1. `src/adapters/singbox/SingBoxConfigEngine.ts` 实现 JSON/JSONC 解析、序列化、官方 JSON Schema、跨标签引用与代理组循环依赖校验。
 2. 官方 `https://sing-box.sagernet.org/schema.json` 已固定在仓库中，部署后校验不依赖外网。
 3. `src/stores/singbox.ts` 使用独立草稿键，避免两个内核的配置相互覆盖。
-4. 下一阶段新增 `src/schemas/singbox.ts` 与入站、出站、DNS、路由可视化组件时，继续复用稳定的 `ConfigEngine`、CodeMirror 和校验结果结构。
+4. `src/components/singbox/` 按基础、入站、出站/代理组、DNS、规则集和路由拆分组件；各模块只通过 Pinia 路径 API 修改配置，便于继续增加协议字段。
+5. selector/urltest 组、规则集、入站、出站和 DNS 引用由当前配置动态生成选择项，避免用户手写标签；未知或尚未可视化的字段在编辑同类型对象时原样保留。
+6. 高级源码页继续复用 CodeMirror，作为实验字段和复杂内联规则的完整兜底入口。
 
 ## 性能策略
 

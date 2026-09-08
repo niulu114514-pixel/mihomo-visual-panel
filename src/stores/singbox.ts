@@ -6,12 +6,37 @@ import { SingBoxConfigEngine } from '@/adapters/singbox/SingBoxConfigEngine'
 const DRAFT_KEY = 'mihomo-flow.sing-box-draft'
 const engine = new SingBoxConfigEngine()
 
+function readPath(root: ConfigDocument, path: string): unknown {
+  return path.split('.').reduce<unknown>((value, key) => value && typeof value === 'object' ? (value as Record<string, unknown>)[key] : undefined, root)
+}
+
 export const useSingBoxStore = defineStore('sing-box-config', () => {
   const config = ref<ConfigDocument>(engine.createEmpty())
   const fileName = ref('config.json')
   const changed = ref(false)
   const source = computed(() => engine.stringify(config.value))
   const issues = computed(() => engine.validate(config.value))
+
+  function get(path: string) { return readPath(config.value, path) }
+
+  function set(path: string, value: unknown) {
+    const keys = path.split('.')
+    const next = JSON.parse(JSON.stringify(config.value)) as ConfigDocument
+    let cursor: Record<string, unknown> = next
+    keys.forEach((key, index) => {
+      if (index === keys.length - 1) {
+        if (value === undefined || value === '') delete cursor[key]
+        else cursor[key] = value
+      } else {
+        if (!cursor[key] || typeof cursor[key] !== 'object' || Array.isArray(cursor[key])) cursor[key] = {}
+        cursor = cursor[key] as Record<string, unknown>
+      }
+    })
+    config.value = next
+    saveDraft()
+  }
+
+  function setRoot(key: string, value: unknown) { set(key, value) }
 
   function saveDraft() {
     changed.value = true
@@ -57,5 +82,5 @@ export const useSingBoxStore = defineStore('sing-box-config', () => {
     changed.value = false
   }
 
-  return { config, fileName, changed, source, issues, newConfig, applySource, importJson, restoreDraft, download }
+  return { config, fileName, changed, source, issues, get, set, setRoot, newConfig, applySource, importJson, restoreDraft, download }
 })
