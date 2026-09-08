@@ -24,6 +24,8 @@ Mihomo YAML / sing-box JSON/JSONC
 - `src/adapters/mihomo/MihomoConfigEngine.ts`：Mihomo YAML 的解析、序列化和语义验证。
 - `src/stores/config.ts`：唯一配置文档、路径读写、草稿和导出。
 - `src/components/`：表单、集合、Hosts、规则和 YAML 编辑器；高级未知字段在结构化编辑时保持原样。
+- `src/components/ProxyGroupEditor.vue`：从当前文档派生节点、订阅与代理组选项，不保存额外索引，导入配置后即可选择。
+- `src/schemas/mihomo-rule-templates.ts`：Mihomo 常用 MRS 规则集合模板及生成函数，与通用集合编辑器解耦。
 - `src/router/`：按内核和模块组织 URL，页面组件使用懒加载。
 - `src/components/YamlEditor.vue`：隔离 CodeMirror 生命周期与 Vue 状态同步。
 

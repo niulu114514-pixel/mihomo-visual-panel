@@ -9,6 +9,8 @@
 - CodeMirror 6 行号、YAML 语法高亮和源码编辑
 - 新建、导入现有 YAML、源码编辑、复制、验证和导出
 - 全局、代理节点、代理组、代理/规则集合、路由规则、DNS、TLS、外部控制、Profile、TUN、嗅探、Hosts、隧道和入站监听
+- Mihomo 代理组自动读取现有节点、订阅集合和其他代理组，使用搜索选择代替手写名称，并检测循环嵌套
+- 内置 MetaCubeX 常用 MRS 规则集合模板，自动识别配置中已经存在的同源规则，避免重复添加
 - 未被表单识别的字段在导入和导出过程中仍会完整保留
 - 草稿自动保存在当前浏览器，刷新后可恢复
 - 响应式桌面/移动端界面
@@ -81,7 +83,7 @@ edgeone makers deploy ./dist -n mihomo-visual-panel
 
 ## 可维护性
 
-配置界面由 schema 驱动，解析、序列化和验证由独立的 `ConfigEngine` 实现。Mihomo 代理组使用完整字段化表单，代理/规则集合、隧道、监听和 Hosts 也均可视化编辑；未知扩展字段在表单保存时原样保留。sing-box 已提供基础设置、入站、出站/代理组、DNS、规则集和路由规则的可视化编辑，selector/urltest 组成员与各类引用通过已有标签选择；同时保留 JSON/JSONC 高级源码、官方 Draft 2020-12 Schema、引用与循环依赖校验。实现细节见 [架构说明](docs/ARCHITECTURE.md)。
+配置界面由 schema 驱动，解析、序列化和验证由独立的 `ConfigEngine` 实现。Mihomo 代理组使用读取式选择表单，节点、代理集合、其他代理组和内置策略会自动成为候选项；代理/规则集合、隧道、监听和 Hosts 也均可视化编辑，未知扩展字段在保存时原样保留。sing-box 已提供基础设置、入站、出站/代理组、DNS、规则集和路由规则的可视化编辑，selector/urltest 组成员与各类引用通过已有标签选择；同时保留 JSON/JSONC 高级源码、官方 Draft 2020-12 Schema、引用与循环依赖校验。实现细节见 [架构说明](docs/ARCHITECTURE.md)。
 
 校验规则会阻止存在明确错误的配置导出。静态网页无法替代目标设备上的内核、远程订阅、文件路径和网络环境检查，上机前仍建议分别执行 `mihomo -t -f config.yaml` 或 `sing-box check -c config.json`。
 

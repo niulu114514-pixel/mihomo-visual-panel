@@ -216,6 +216,8 @@ a { color: var(--blue); text-decoration: none; }
 .structured-card { min-height: 132px; }
 .structured-card .card-actions { position: absolute; right: 10px; bottom: 9px; display: flex; align-items: center; gap: 1px; }
 .structured-card .card-actions .n-button:hover { color: var(--blue); background: rgba(49,95,119,.08); }
+.editable-card { cursor: pointer; touch-action: manipulation; }
+.editable-card:focus-visible { outline: 2px solid rgba(49,95,119,.45); outline-offset: 2px; }
 .structured-modal { width: min(760px, calc(100vw - 32px)); max-height: calc(100vh - 40px); }
 .structured-modal > .n-card__content { overflow: auto; }
 .visual-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
@@ -345,7 +347,9 @@ a { color: var(--blue); text-decoration: none; }
   .rules-toolbar { align-items: stretch; flex-direction: column; }
   .rules-toolbar .collection-search { width: 100%; }
   .card-grid { grid-template-columns: 1fr; }
-  .structured-card .card-actions .n-button { width: 38px; height: 38px; }
+  .structured-card { min-height: 0; padding-bottom: 14px; }
+  .structured-card .card-actions { position: static; min-height: 48px; margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(72,92,103,.1); justify-content: flex-end; }
+  .structured-card .card-actions .n-button { width: 42px; height: 42px; }
   .edit-chip { min-width: 54px; height: 34px; }
   .rules-card { overflow: visible; border: 0; background: transparent; box-shadow: none; backdrop-filter: none; }
   .rules-table-scroll { overflow: visible; }
@@ -462,8 +466,11 @@ a { color: var(--blue); text-decoration: none; }
   .group-form { max-height: none; overflow: visible; padding-right: 0; }
   .visual-form .config-field,
   .visual-form .config-field--wide { grid-template-columns: 1fr; gap: 8px; }
+  .structured-card { min-height: 0; padding-bottom: 14px; }
+  .structured-card .card-actions { position: static; min-height: 48px; margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(72,92,103,.1); justify-content: flex-end; }
+  .structured-card .card-actions .n-button { width: 42px; height: 42px; }
   .group-form .config-field { min-height: 88px; }
-  .group-tags { margin-bottom: 38px; }
+  .group-tags { margin-bottom: 0; }
   .singbox-studio { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
   .singbox-header .app-logo { min-width: 0; }
   .singbox-header .header-file { display: none; }

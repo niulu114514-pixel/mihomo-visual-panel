@@ -135,6 +135,26 @@ export class MihomoConfigEngine implements ConfigEngine {
       if (group['default-selected'] && !members.includes(String(group['default-selected']))) add('warning', `${path}.default-selected`, '默认节点不在当前 proxies 成员中')
     })
 
+    const groupGraph = new Map(groups.map((group) => {
+      const name = String(group.name || '')
+      return [name, textList(group.proxies).filter((member) => groupNames.includes(member))] as const
+    }).filter(([name]) => name))
+    const visitingGroups = new Set<string>()
+    const visitedGroups = new Set<string>()
+    const visitGroup = (name: string, chain: string[]) => {
+      if (visitingGroups.has(name)) {
+        const start = chain.indexOf(name)
+        add('error', 'proxy-groups', `代理组存在循环引用：${[...chain.slice(start), name].join(' → ')}`)
+        return
+      }
+      if (visitedGroups.has(name)) return
+      visitingGroups.add(name)
+      for (const member of groupGraph.get(name) ?? []) visitGroup(member, [...chain, name])
+      visitingGroups.delete(name)
+      visitedGroups.add(name)
+    }
+    for (const name of groupGraph.keys()) visitGroup(name, [])
+
     Object.entries(proxyProviders).forEach(([name, value]) => {
       const path = `proxy-providers.${name}`
       if (!isRecord(value)) return add('error', path, '代理集合配置必须是对象')

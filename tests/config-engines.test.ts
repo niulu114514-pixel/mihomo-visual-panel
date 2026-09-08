@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { MihomoConfigEngine } from '@/adapters/mihomo/MihomoConfigEngine'
 import { SingBoxConfigEngine } from '@/adapters/singbox/SingBoxConfigEngine'
+import { createMihomoRuleProvider, mihomoRuleProviderTemplates } from '@/schemas/mihomo-rule-templates'
 
 describe('MihomoConfigEngine', () => {
   const engine = new MihomoConfigEngine()
@@ -27,6 +28,22 @@ describe('MihomoConfigEngine', () => {
     expect(issues.some((issue) => issue.path === 'mixed-port' && issue.level === 'error')).toBe(true)
     expect(issues.some((issue) => issue.path === 'proxy-groups.0.proxies')).toBe(true)
     expect(issues.some((issue) => issue.path === 'rules.0')).toBe(true)
+  })
+
+  it('accepts every built-in MRS rule provider template', () => {
+    const providers = Object.fromEntries(mihomoRuleProviderTemplates.map((template) => [template.name, createMihomoRuleProvider(template)]))
+    const issues = engine.validate({ 'rule-providers': providers })
+    expect(issues.filter((issue) => issue.level === 'error')).toEqual([])
+  })
+
+  it('detects cyclic nested proxy groups', () => {
+    const issues = engine.validate({
+      'proxy-groups': [
+        { name: 'group-a', type: 'select', proxies: ['group-b'] },
+        { name: 'group-b', type: 'select', proxies: ['group-a'] },
+      ],
+    })
+    expect(issues.some((issue) => issue.message.includes('循环引用'))).toBe(true)
   })
 })
 

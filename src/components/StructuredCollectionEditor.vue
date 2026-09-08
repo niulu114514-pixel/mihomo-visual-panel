@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { ArrowDown, ArrowUp, ExternalLink, Pencil, Plus, Trash2 } from '@lucide/vue'
-import { NAlert, NButton, NInput, NModal, NPopconfirm, useMessage } from 'naive-ui'
+import { ArrowDown, ArrowUp, ExternalLink, Pencil, Plus, Sparkles, Trash2 } from '@lucide/vue'
+import { NAlert, NButton, NInput, NModal, NPopconfirm, NSelect, useMessage } from 'naive-ui'
 import ConfigField from './ConfigField.vue'
 import type { ConfigModuleSchema } from '@/schemas/types'
+import { createMihomoRuleProvider, mihomoRuleProviderTemplates, type MihomoRuleProviderTemplate } from '@/schemas/mihomo-rule-templates'
 import { structuredModuleSchemas } from '@/schemas/structured'
 import { useConfigStore } from '@/stores/config'
 
@@ -19,6 +20,13 @@ const draft = ref<Record<string, unknown>>({})
 
 const schema = computed(() => structuredModuleSchemas[props.module.id]!)
 const rootValue = computed(() => store.get(props.module.rootKey!))
+const proxyTargets = computed(() => {
+  const proxies = Array.isArray(store.get('proxies')) ? store.get('proxies') as Record<string, unknown>[] : []
+  const groups = Array.isArray(store.get('proxy-groups')) ? store.get('proxy-groups') as Record<string, unknown>[] : []
+  const values = ['DIRECT', 'REJECT', 'REJECT-DROP', 'PASS', 'COMPATIBLE', 'GLOBAL', ...proxies.map((item) => String(item.name || '')), ...groups.map((item) => String(item.name || ''))].filter(Boolean)
+  const current = typeof draft.value.proxy === 'string' ? draft.value.proxy : ''
+  return [...new Set([...values, current].filter(Boolean))].map((value) => ({ label: value, value }))
+})
 
 interface ItemView {
   id: string
@@ -100,6 +108,20 @@ function openEdit(item: ItemView) {
   dialogOpen.value = true
 }
 
+function addRuleTemplate(template: MihomoRuleProviderTemplate) {
+  if (props.module.id !== 'rule-providers') return
+  if (ruleTemplateAdded(template)) return message.info(`“${template.label}”规则集合已经存在`)
+  const current = rootValue.value && typeof rootValue.value === 'object' && !Array.isArray(rootValue.value) ? clone(rootValue.value as Record<string, unknown>) : {}
+  current[template.name] = createMihomoRuleProvider(template)
+  store.setRoot(props.module.rootKey!, current)
+  message.success(`已添加“${template.label}”规则集合`)
+}
+
+function ruleTemplateAdded(template: MihomoRuleProviderTemplate) {
+  const suffix = `/geo/${template.category}/${template.code}.mrs`
+  return items.value.some((item) => item.key === template.name || String(itemObject(item).url || '').endsWith(suffix))
+}
+
 function save() {
   const value = prune(draft.value) as Record<string, unknown>
   if (schema.value.collection === 'map') {
@@ -165,12 +187,16 @@ function summary(item: ItemView) {
       <NInput v-model:value="query" clearable :placeholder="`搜索${module.label}`" class="collection-search" />
       <span>共 {{ items.length }} 项</span>
     </div>
+    <section v-if="module.id === 'rule-providers'" class="rule-template-panel mihomo-rule-templates">
+      <header><Sparkles :size="16" /><div><strong>常用规则集合</strong><span>来自 MetaCubeX 官方规则数据，点击即可添加 MRS 配置</span></div></header>
+      <div class="rule-template-grid"><button v-for="template in mihomoRuleProviderTemplates" :key="template.name" type="button" :class="{ added: ruleTemplateAdded(template) }" @click="addRuleTemplate(template)"><span>{{ template.label }}</span><small>{{ ruleTemplateAdded(template) ? '已添加' : template.description }}</small></button></div>
+    </section>
     <section v-if="shown.length" class="card-grid">
-      <article v-for="item in shown" :key="item.id" class="item-card structured-card" @dblclick="openEdit(item)">
+      <article v-for="item in shown" :key="item.id" class="item-card structured-card editable-card" role="group" :aria-label="`编辑${title(item)}`" tabindex="0" @click="openEdit(item)" @keydown.enter="openEdit(item)">
         <div class="item-type">{{ itemObject(item).type || module.id }}</div>
         <h3>{{ title(item) }}</h3>
         <p>{{ summary(item) }}</p>
-        <div class="card-actions">
+        <div class="card-actions" @click.stop>
           <template v-if="schema.collection === 'list'">
             <NButton quaternary circle size="tiny" :disabled="item.index === 0" title="上移" @click="move(item, -1)"><template #icon><ArrowUp :size="13" /></template></NButton>
             <NButton quaternary circle size="tiny" :disabled="item.index === items.length - 1" title="下移" @click="move(item, 1)"><template #icon><ArrowDown :size="13" /></template></NButton>
@@ -191,7 +217,10 @@ function summary(item: ItemView) {
           <div class="field-copy"><label>{{ schema.nameLabel }}</label><p>名称必须唯一，引用时使用此名称</p></div>
           <NInput v-model:value="draftName" placeholder="请输入唯一名称" />
         </div>
-        <ConfigField v-for="field in schema.fields" :key="field.path" :field="field" :model-value="readPath(draft, field.path)" @update:model-value="writePath(field.path, $event)" />
+        <template v-for="field in schema.fields" :key="field.path">
+          <div v-if="field.path === 'proxy'" class="config-field"><div class="field-copy"><label>{{ field.label }}</label><p>从现有节点、代理组或内置策略中选择</p></div><NSelect clearable filterable tag :value="draft.proxy ? String(draft.proxy) : null" :options="proxyTargets" placeholder="DIRECT" @update:value="writePath('proxy',$event)" /></div>
+          <ConfigField v-else :field="field" :model-value="readPath(draft, field.path)" @update:model-value="writePath(field.path, $event)" />
+        </template>
       </div>
       <NAlert v-if="editingIndex !== null || editingKey" type="info" :bordered="false">表单未展示的协议专属字段会原样保留，可继续通过右侧“源码编辑”处理高级配置。</NAlert>
       <template #footer><div class="modal-actions"><NButton @click="dialogOpen = false">取消</NButton><NButton type="primary" @click="save">保存</NButton></div></template>
